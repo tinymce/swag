@@ -1,26 +1,47 @@
 let resolve = require('resolve');
+
 import * as path from 'path';
-import * as CachedFileSystem from '../fs/CachedFileSystem';
+import { FileSystem } from '../fs/FileSystem';
 
 type Prefixes = any;
 
-interface Options {
-  basedir?: string,
-  prefixes?: Prefixes
-}
+let resolveSync = (fs: FileSystem, importee: string, importer: string): string => {
+  let resolved = resolve.sync(
+    importee,
+    {
+      basedir: path.dirname(importer),
+      isFile: fs.isFileSync,
+      readFile: fs.readFileSync,
+      preserveSymlinks: false
+    }
+  );
 
-let resolveUsingNode = (importee: string, importer: string): Promise<string> => {
+  if (resolved && fs.isFileSync(resolved)) {
+    return fs.realpathSync(resolved);
+  } else {
+    return resolved;
+  }
+};
+
+let resolveUsingNode = (fs: FileSystem, importee: string, importer: string): Promise<string> => {
   return new Promise((fulfil, reject) => {
+    //console.log(importee, importer);
     resolve(
       importee,
       {
         basedir: path.dirname(importer),
-        isFile: CachedFileSystem.isFile,
-        readFile: CachedFileSystem.readFile
+        isFile: fs.isFile,
+        readFile: fs.readFile,
+        preserveSymlinks: false
       }, (err, resolved) => {
         if (err) {
+          console.log(err)
           reject(err);
         } else {
+          if (resolved && fs.isFileSync(resolved)) {
+            resolved = fs.realpathSync(resolved);
+          }
+
           fulfil(resolved);
         }
       }
@@ -57,27 +78,19 @@ let resolvePrefixPaths = (baseDir: string, prefixes: Prefixes): Prefixes => {
   return outPrefixes;
 };
 
-let resolveId = (prefixes: Prefixes) => (importee: string, importer: string) => {
+let resolveId = (fs: FileSystem, prefixes: Prefixes) => (importee: string, importer: string) => {
   if (/\0/.test(importee) || !importer) return null;
 
   if (matchesPrefix(prefixes, importee)) {
     return resolvePrefix(prefixes, importee, importer);
   } else {
-    return resolveUsingNode(importee, importer);
+    return resolveUsingNode(fs, importee, importer);
   }
-};
-
-let nodeResolve = (options: Options={}) => {
-  let prefixes = resolvePrefixPaths(options.basedir, options.prefixes);
-
-  return {
-    name: 'swag-resolve',
-    resolveId: resolveId(prefixes)
-  };
 };
 
 export {
   Prefixes,
-  Options,
-  nodeResolve
+  resolveSync,
+  resolvePrefixPaths,
+  resolveId
 }

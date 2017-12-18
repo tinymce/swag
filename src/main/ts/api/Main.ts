@@ -1,5 +1,9 @@
-import { nodeResolve } from '../core/Resolve';
+import { nodeResolve } from '../rollup/NodeResolve';
+import { patchExports } from '../rollup/PatchExports';
+import { remapImports } from '../rollup/RemapImports';
 
 export {
-  nodeResolve
+  nodeResolve,
+  patchExports,
+  remapImports
 };
