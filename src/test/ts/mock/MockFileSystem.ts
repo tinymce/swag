@@ -11,10 +11,14 @@ let createFile = (filePath: string, data?: string): File => {
   return { filePath, data: new Buffer(data ? data : '', 'utf-8') };
 };
 
+let createJsonFile = (filePath: string, data: any): File => {
+  return createFile(filePath, JSON.stringify(data, null, 2));
+};
+
 let getFileSystem = (files: File[]): FileSystem => {
-  let isFile = (filePath: string, cb: (err: any, state?: boolean) => any): void => {
+  let isFile = (filePath: string, callback: (err: any, state?: boolean) => any): void => {
     let file = findFileByPath(files, filePath);
-    cb(null, file !== undefined);
+    callback(null, file !== undefined);
   };
 
   let readFile = (filePath: string, callback: (err: any, data?: Buffer) => any): void => {
@@ -47,5 +51,6 @@ let getFileSystem = (files: File[]): FileSystem => {
 
 export {
   getFileSystem,
-  createFile
+  createFile,
+  createJsonFile
 }

@@ -19,16 +19,15 @@ let serialize = (node: estree.Node): string => {
     comment: true,
     format: {
       indent: {
-          style: '',
-          base: 0,
-          adjustMultilineComment: false
+        style: '  ',
+        base: 0
       },
       preserveBlankLines: false,
       safeConcatenation: true
     }
   });
 
-  return escapeStr(code);
+  return escapeStr(code.trim());
 };
 
 export {

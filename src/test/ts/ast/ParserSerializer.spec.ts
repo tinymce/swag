@@ -10,7 +10,6 @@ describe('Parser/Serializer', () => {
     ].join('\n'));
 
     expect(serialize(ast)).to.equal([
-      '',
       'var x = { x: \'a\\uFEFF\\uFEFF\' };'
     ].join('\n'));
   });

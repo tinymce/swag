@@ -12,7 +12,7 @@ let getFileSystem = (): FileSystem => {
     if (typeof cacheItem !== 'undefined') {
       return cb(null, cacheItem);
     }
-  
+
     fs.stat(file, function (err, stat) {
       if (!err) {
         let exists = stat.isFile() || stat.isFIFO();

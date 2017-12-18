@@ -18,7 +18,7 @@ let generate = (prefix: string): string => {
 
   unique++;
 
-  return prefix + '_' + random + unique + String(time);
+  return prefix + '_' + random.toString(36) + unique.toString(36) + time.toString(36);
 };
 
 export {

@@ -11,7 +11,7 @@ let resolveSync = (fs: FileSystem, importee: string, importer: string): string =
     {
       basedir: path.dirname(importer),
       isFile: fs.isFileSync,
-      readFile: fs.readFileSync,
+      readFileSync: fs.readFileSync,
       preserveSymlinks: false
     }
   );

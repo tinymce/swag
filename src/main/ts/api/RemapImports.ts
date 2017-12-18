@@ -4,16 +4,17 @@ import { patch } from '../ast/PatchExports';
 import { remap } from '../ast/Remap';
 import { FileSystem } from '../fs/FileSystem';
 import { getFileSystem } from '../fs/CachedFileSystem';
+import { createMainModuleCache } from '../ast/MainModuleCache'
 
 interface Options {
   fileSystem?: FileSystem
 }
 
-let transform = (fs: FileSystem) => (code: string, id: string): any => {
+let transform = (fs: FileSystem, mainModuleCache) => (code: string, id: string): any => {
   let program = parse(code);
 
   patch(program);
-  remap(fs, id, program);
+  remap(fs, mainModuleCache, id, program);
 
   let newCode = serialize(program);
 
@@ -25,10 +26,11 @@ let transform = (fs: FileSystem) => (code: string, id: string): any => {
 
 let remapImports = (options: Options={}) => {
   let fs = options.fileSystem ? options.fileSystem : getFileSystem();
+  let mainModuleCache = createMainModuleCache();
 
   return {
     name: 'swag-remap-imports',
-    transform: transform(fs)
+    transform: transform(fs, mainModuleCache)
   };
 };
 

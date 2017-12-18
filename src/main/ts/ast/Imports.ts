@@ -1,4 +1,5 @@
 import * as estree from 'estree';
+import { fail } from '../utils/Fail'
 
 interface ImportInfo {
   kind: string,       // default, namespace, specified
@@ -34,6 +35,8 @@ let readImportDeclaration = (node: estree.ImportDeclaration) => {
     } else if (specifier.type === 'ImportSpecifier') {
       let name = node.source.value as string;
       return readImportSpecifier(name, specifier as estree.ImportSpecifier);
+    } else {
+      fail('Unknown specifier.');
     }
   });
 };
@@ -109,7 +112,7 @@ let toAst = (imports: ImportInfo[]): estree.ImportDeclaration[] => {
           raw: `'${imp.modulePath}'`
         }
       } as estree.ImportDeclaration;
-    } 
+    }
   });
 };
 

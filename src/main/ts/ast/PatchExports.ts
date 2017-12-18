@@ -2,7 +2,7 @@ import * as estree from 'estree';
 import * as Uuid from '../utils/Uuid';
 
 let patch = (node: estree.Program): void => {
-  let id = Uuid.generate('ephox');
+  let id = Uuid.generate('$');
 
   node.body = node.body.reduce((acc, node) => {
     if (node.type === 'ExportDefaultDeclaration') {
