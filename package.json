@@ -1,0 +1,24 @@
+{
+  "name": "@ephox/swag",
+  "version": "1.0.0",
+  "description": "A collection of rollup tools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ephox/swag"
+  },
+  "scripts": {
+    "test": "bolt test config/bolt/atomic.js $(find src/test/js/atomic -name *Test.js)",
+    "prepublishOnly": "tsc"
+  },
+  "author": "Ephox Corporation",
+  "license": "Apache-2.0",
+  "main": "./lib/api/Main.js",
+  "types": "./lib/api/Main.d.ts",
+  "dependencies": {
+    "@types/estree": "0.0.38",
+    "@types/node": "^8.5.1",
+    "acorn": "^5.2.1",
+    "ast-types": "^0.10.1",
+    "resolve": "^1.5.0"
+  }
+}
