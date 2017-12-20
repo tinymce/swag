@@ -1,0 +1,41 @@
+{
+  "name": "@ephox/swag",
+  "version": "1.0.0",
+  "description": "A collection of tools for rollup",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ephox/swag"
+  },
+  "files": [
+    "lib",
+    "LEGAL.txt",
+    "LICENSE.txt"
+  ],
+  "scripts": {
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "prepublishOnly": "tsc"
+  },
+  "author": "Ephox Corporation",
+  "license": "Apache-2.0",
+  "main": "./lib/api/Main.js",
+  "types": "./lib/api/Main.d.ts",
+  "dependencies": {
+    "@types/acorn": "^4.0.3",
+    "@types/escodegen": "0.0.6",
+    "@types/estree": "0.0.38",
+    "@types/node": "^8.5.1",
+    "acorn": "^5.2.1",
+    "escodegen": "^1.9.0",
+    "resolve": "^1.5.0"
+  },
+  "devDependencies": {
+    "command-line-args": "^4.0.7",
+    "nlf": "^2.0.0",
+    "@types/chai": "^4.0.10",
+    "@types/mocha": "^2.2.44",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "ts-node": "^4.0.2",
+    "typescript": "^2.6.2"
+  }
+}
