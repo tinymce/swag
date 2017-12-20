@@ -2,6 +2,7 @@
   "name": "@ephox/swag",
   "version": "1.0.0",
   "description": "A collection of tools for rollup",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/ephox/swag"
@@ -37,5 +38,8 @@
     "mocha": "^4.0.1",
     "ts-node": "^4.0.2",
     "typescript": "^2.6.2"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   }
 }
