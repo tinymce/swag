@@ -3,16 +3,15 @@ import { getFileSystem } from '../fs/CachedFileSystem';
 import { FileSystem } from '../fs/FileSystem';
 
 interface Options {
-  basedir?: string;
-  prefixes?: Prefixes;
+  basedir: string;
+  prefixes: Prefixes;
   fileSystem?: FileSystem;
 }
 
-const nodeResolve = (options: Options) => {
-  const combinedOptions = {
-    ...{ basedir: '.', prefixes: [] },
-    ...options
-  };
+const defaultOptions = { basedir: '.', prefixes: [] };
+
+const nodeResolve = (options: Options = defaultOptions) => {
+  const combinedOptions = {...defaultOptions, ...options};
   const prefixes = resolvePrefixPaths(combinedOptions.basedir, combinedOptions.prefixes);
   const fs = options.fileSystem ? options.fileSystem : getFileSystem();
 
