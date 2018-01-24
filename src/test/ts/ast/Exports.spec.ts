@@ -5,7 +5,7 @@ import 'mocha';
 
 describe('Exports', () => {
   it('readExports should read the various formats correctly', () => {
-    let exports = readExports(parse(`
+    const exports = readExports(parse(`
       export {
         a,
         b,

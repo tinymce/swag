@@ -5,7 +5,7 @@ import 'mocha';
 
 describe('Parser/Serializer', () => {
   it('should handle unicode correctly when parsing/serializing', () => {
-    let ast = parse([
+    const ast = parse([
       'var x = { x: "a\\ufeff\ufeff" };'
     ].join('\n'));
 

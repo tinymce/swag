@@ -9,34 +9,42 @@
   },
   "files": [
     "lib",
+    "tasks",
     "LEGAL.txt",
     "LICENSE.txt"
   ],
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "prepublishOnly": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "author": "Ephox Corporation",
   "license": "Apache-2.0",
   "main": "./lib/api/Main.js",
   "types": "./lib/api/Main.d.ts",
   "dependencies": {
-    "@types/acorn": "^4.0.3",
     "@types/escodegen": "0.0.6",
     "@types/estree": "0.0.38",
     "@types/node": "^8.5.1",
     "acorn": "^5.2.1",
     "escodegen": "^1.9.0",
-    "resolve": "^1.5.0"
+    "magic-string": "^0.22.4",
+    "resolve": "^1.5.0",
+    "rollup": "^0.54.1"
   },
   "devDependencies": {
-    "command-line-args": "^4.0.7",
-    "nlf": "^2.0.0",
-    "@types/chai": "^4.0.10",
+    "@types/acorn": "^4.0.3",
+    "@types/chai": "^4.1.2",
+    "@types/chokidar": "^1.7.4",
+    "@types/grunt": "^0.4.22",
     "@types/mocha": "^2.2.44",
+    "@types/rollup": "^0.54.0",
     "chai": "^4.1.2",
+    "command-line-args": "^4.0.7",
     "mocha": "^4.0.1",
-    "ts-node": "^4.0.2",
+    "nlf": "^2.0.0",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
     "typescript": "^2.6.2"
   },
   "publishConfig": {

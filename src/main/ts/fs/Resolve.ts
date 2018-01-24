@@ -1,12 +1,11 @@
-let resolve = require('resolve');
-
+import * as resolve from 'resolve';
 import * as path from 'path';
 import { FileSystem } from '../fs/FileSystem';
 
 type Prefixes = any;
 
-let resolveSync = (fs: FileSystem, importee: string, importer: string): string => {
-  let resolved = resolve.sync(
+const resolveSync = (fs: FileSystem, importee: string, importer: string): string => {
+  const resolved = resolve.sync(
     importee,
     {
       basedir: path.dirname(importer),
@@ -23,9 +22,9 @@ let resolveSync = (fs: FileSystem, importee: string, importer: string): string =
   }
 };
 
-let resolveUsingNode = (fs: FileSystem, importee: string, importer: string): Promise<string> => {
+const resolveUsingNode = (fs: FileSystem, importee: string, importer: string): Promise<string> => {
   return new Promise((fulfil, reject) => {
-    //console.log(importee, importer);
+    // console.log(importee, importer);
     resolve(
       importee,
       {
@@ -35,7 +34,7 @@ let resolveUsingNode = (fs: FileSystem, importee: string, importer: string): Pro
         preserveSymlinks: false
       }, (err, resolved) => {
         if (err) {
-          console.log(err)
+          console.log(err);
           reject(err);
         } else {
           if (resolved && fs.isFileSync(resolved)) {
@@ -49,37 +48,37 @@ let resolveUsingNode = (fs: FileSystem, importee: string, importer: string): Pro
   });
 };
 
-let normalizePrefix = (prefix: string): string => {
+const normalizePrefix = (prefix: string): string => {
   return prefix.endsWith('/') ? prefix : prefix + '/';
 };
 
-let matchesPrefix = (prefixes: Prefixes, importee: string): boolean => {
+const matchesPrefix = (prefixes: Prefixes, importee: string): boolean => {
   return Object.keys(prefixes).find((p) => importee.startsWith(normalizePrefix(p))) !== undefined;
 };
 
-let resolvePrefix = (prefixes: Prefixes, importee: string, importer: string): Promise<string> => {
+const resolvePrefix = (prefixes: Prefixes, importee: string, importer: string): Promise<string> => {
   return new Promise((fulfil, reject) => {
-    let prefix = Object.keys(prefixes).find((p) => importee.startsWith(normalizePrefix(p)));
-    let resolvedPrefix = prefixes[prefix];
-    let resolvedPath = path.join(resolvedPrefix, importee.substring(normalizePrefix(prefix).length)) + '.js';
+    const prefix = Object.keys(prefixes).find((p) => importee.startsWith(normalizePrefix(p)));
+    const resolvedPrefix = prefixes[prefix];
+    const resolvedPath = path.join(resolvedPrefix, importee.substring(normalizePrefix(prefix).length)) + '.js';
 
     fulfil(resolvedPath);
   });
 };
 
-let resolvePrefixPaths = (baseDir: string, prefixes: Prefixes): Prefixes => {
-  let outPrefixes = {};
+const resolvePrefixPaths = (baseDir: string, prefixes: Prefixes): Prefixes => {
+  const outPrefixes = {};
 
   Object.keys(prefixes).forEach((prefix) => {
-    let resolveBaseDir = baseDir ? baseDir : '.';
+    const resolveBaseDir = baseDir ? baseDir : '.';
     outPrefixes[prefix] = path.resolve(path.join(resolveBaseDir, prefixes[prefix]));
   });
 
   return outPrefixes;
 };
 
-let resolveId = (fs: FileSystem, prefixes: Prefixes) => (importee: string, importer: string) => {
-  if (/\0/.test(importee) || !importer) return null;
+const resolveId = (fs: FileSystem, prefixes: Prefixes) => (importee: string, importer: string) => {
+  if (/\0/.test(importee) || !importer) { return null; }
 
   if (matchesPrefix(prefixes, importee)) {
     return resolvePrefix(prefixes, importee, importer);
@@ -93,4 +92,4 @@ export {
   resolveSync,
   resolvePrefixPaths,
   resolveId
-}
+};

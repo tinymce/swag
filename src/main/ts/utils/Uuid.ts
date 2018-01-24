@@ -11,10 +11,10 @@
  */
 let unique = 0;
 
-let generate = (prefix: string): string => {
-  var date   = new Date();
-  var time   = date.getTime();
-  var random = Math.floor(Math.random() * 1000000000);
+const generate = (prefix: string): string => {
+  const date   = new Date();
+  const time   = date.getTime();
+  const random = Math.floor(Math.random() * 1000000000);
 
   unique++;
 

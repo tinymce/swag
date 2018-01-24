@@ -1,7 +1,7 @@
-let fail = (msg: string): never => {
+const fail = (msg: string): never => {
   throw new Error(msg);
 };
 
 export {
   fail
-}
+};

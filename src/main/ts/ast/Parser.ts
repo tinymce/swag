@@ -1,8 +1,8 @@
 import * as acorn from 'acorn';
 import * as estree from 'estree';
 
-let parse = (code: string): estree.Program => {
-  let program = acorn.parse(code, {
+const parse = (code: string): estree.Program => {
+  const program = acorn.parse(code, {
     ecmaVersion: 8,
     sourceType: 'module',
     preserveParens: false,
@@ -14,4 +14,4 @@ let parse = (code: string): estree.Program => {
 
 export {
   parse
-}
+};

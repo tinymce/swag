@@ -1,33 +1,33 @@
 import * as estree from 'estree';
 import * as Uuid from '../utils/Uuid';
 
-let patch = (node: estree.Program): void => {
-  let id = Uuid.generate('$');
+const patch = (node: estree.Program): void => {
+  const id = Uuid.generate('$');
 
   node.body = node.body.reduce((acc, node) => {
     if (node.type === 'ExportDefaultDeclaration') {
-      var declaration = node.declaration;
+      const declaration = node.declaration;
       if (declaration.type === 'ObjectExpression') {
         return acc.concat([
           {
-            "type": "VariableDeclaration",
-            "declarations": [
+            type: 'VariableDeclaration',
+            declarations: [
               {
-                "type": "VariableDeclarator",
-                "id": {
-                  "type": "Identifier",
-                  "name": id
+                type: 'VariableDeclarator',
+                id: {
+                  type: 'Identifier',
+                  name: id
                 },
-                "init": declaration
+                init: declaration
               }
             ],
-            "kind": "var"
+            kind: 'var'
           },
           {
-            "type": "ExportDefaultDeclaration",
-            "declaration": {
-              "type": "Identifier",
-              "name": id
+            type: 'ExportDefaultDeclaration',
+            declaration: {
+              type: 'Identifier',
+              name: id
             }
           }
         ]);
@@ -40,4 +40,4 @@ let patch = (node: estree.Program): void => {
 
 export {
   patch
-}
+};

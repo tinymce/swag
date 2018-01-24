@@ -1,19 +1,19 @@
 interface ObjectCache<T> {
-  get(key: string): T,
-  put(key: string, value:T)
-  getOrThunk(key: string, f: () => T)
+  get(key: string): T;
+  put(key: string, value: T);
+  getOrThunk(key: string, f: () => T);
 }
 
-let createObjectCache = <T>(): ObjectCache<T> => {
-  let cache = {};
+const createObjectCache = <T>(): ObjectCache<T> => {
+  const cache = {};
 
-  let get = (key: string) => cache[key] as T;
-  let put = (key: string, value: T) => cache[key] = value;
-  let getOrThunk = (key: string, f: () => T) => {
-    let item = get(key);
+  const get = (key: string) => cache[key] as T;
+  const put = (key: string, value: T) => cache[key] = value;
+  const getOrThunk = (key: string, f: () => T) => {
+    const item = get(key);
 
     if (item === undefined) {
-      let newItem = f();
+      const newItem = f();
       put(key, newItem);
       return newItem;
     } else {
@@ -31,4 +31,4 @@ let createObjectCache = <T>(): ObjectCache<T> => {
 export {
   ObjectCache,
   createObjectCache
-}
+};
