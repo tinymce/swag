@@ -5,7 +5,7 @@ import 'mocha';
 
 describe('Imports', () => {
   it('readImports should read the various formats correctly', () => {
-    let imports = readImports(parse(`
+    const imports = readImports(parse(`
       import * as ModuleA from './ModuleA';
       import { a, b as B } from './ModuleB';
       import ModuleC from './ModuleC';
@@ -40,20 +40,20 @@ describe('Imports', () => {
   });
 
   it('createImport should produce a object with all items', () => {
-    let kind = 'kind', fromName = 'fromName', name = 'name', modulePath = 'modulePath';
+    const kind = 'kind', fromName = 'fromName', name = 'name', modulePath = 'modulePath';
 
-    let imp = createImport(kind, name, fromName, modulePath);
+    const imp = createImport(kind, name, fromName, modulePath);
 
     expect(imp).to.eql({
-      kind: kind,
-      fromName: fromName,
-      name: name,
-      modulePath: modulePath
+      kind,
+      fromName,
+      name,
+      modulePath
     });
   });
 
   it('toAst should produce the expected ast from imports', () => {
-    let ast = toAst([
+    const ast = toAst([
       createImport('default', 'A', 'A', './A'),
       createImport('namespace', 'B2', 'B', './B'),
       createImport('specified', 'C2', 'C', './C')

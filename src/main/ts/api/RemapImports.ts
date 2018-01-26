@@ -4,19 +4,19 @@ import { patch } from '../ast/PatchExports';
 import { remap } from '../ast/Remap';
 import { FileSystem } from '../fs/FileSystem';
 import { getFileSystem } from '../fs/CachedFileSystem';
-import { createMainModuleCache } from '../ast/MainModuleCache'
+import { createMainModuleCache, MainModuleCache } from '../ast/MainModuleCache';
 
 interface Options {
-  fileSystem?: FileSystem
+  fileSystem?: FileSystem;
 }
 
-let transform = (fs: FileSystem, mainModuleCache) => (code: string, id: string): any => {
-  let program = parse(code);
+const transform = (fs: FileSystem, mainModuleCache: MainModuleCache) => (code: string, id: string): any => {
+  const program = parse(code);
 
   patch(program);
   remap(fs, mainModuleCache, id, program);
 
-  let newCode = serialize(program);
+  const newCode = serialize(program);
 
   return {
     code: newCode,
@@ -24,9 +24,9 @@ let transform = (fs: FileSystem, mainModuleCache) => (code: string, id: string):
   };
 };
 
-let remapImports = (options: Options={}) => {
-  let fs = options.fileSystem ? options.fileSystem : getFileSystem();
-  let mainModuleCache = createMainModuleCache();
+const remapImports = (options: Options= {}) => {
+  const fs = options.fileSystem ? options.fileSystem : getFileSystem();
+  const mainModuleCache = createMainModuleCache();
 
   return {
     name: 'swag-remap-imports',
@@ -37,4 +37,4 @@ let remapImports = (options: Options={}) => {
 export {
   Options,
   remapImports
-}
+};

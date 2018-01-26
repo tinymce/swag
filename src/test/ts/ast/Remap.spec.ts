@@ -8,10 +8,10 @@ import 'mocha';
 
 describe('Remap', () => {
   it('should remap module imports to absolute file imports', () => {
-    let mockFs = getFileSystem([
+    const mockFs = getFileSystem([
       createJsonFile('/project/node_modules/@ephox/katamari/package.json', {
-        name: "@ephox/katamari",
-        main: "./Main.js"
+        name: '@ephox/katamari',
+        main: './Main.js'
       }),
       createFile('/project/node_modules/@ephox/katamari/Main.js', `
         import * as Fun from './Fun';
@@ -42,7 +42,7 @@ describe('Remap', () => {
       createFile('/project/src/main/ts/Module.js', '')
     ]);
 
-    let program = parse(`
+    const program = parse(`
       import { Fun, Arr, Arr2, noop } from '@ephox/katamari'
     `);
 

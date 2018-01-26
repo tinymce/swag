@@ -2,8 +2,8 @@ import { parse } from '../ast/Parser';
 import { serialize } from '../ast/Serializer';
 import { patch } from '../ast/PatchExports';
 
-let transform = (code: string): any => {
-  let body = parse(code);
+const transform = (code: string): any => {
+  const body = parse(code);
 
   patch(body);
 
@@ -13,13 +13,13 @@ let transform = (code: string): any => {
   };
 };
 
-let patchExports = () => {
+const patchExports = () => {
   return {
     name: 'swag-patch-exports',
-    transform: transform
+    transform
   };
 };
 
 export {
   patchExports
-}
+};

@@ -3,14 +3,17 @@ import { getFileSystem } from '../fs/CachedFileSystem';
 import { FileSystem } from '../fs/FileSystem';
 
 interface Options {
-  basedir?: string,
-  prefixes?: Prefixes,
-  fileSystem?: FileSystem
+  basedir: string;
+  prefixes: Prefixes;
+  fileSystem?: FileSystem;
 }
 
-let nodeResolve = (options: Options={}) => {
-  let prefixes = resolvePrefixPaths(options.basedir, options.prefixes);
-  let fs = options.fileSystem ? options.fileSystem : getFileSystem();
+const defaultOptions = { basedir: '.', prefixes: [] };
+
+const nodeResolve = (options: Options = defaultOptions) => {
+  const combinedOptions = {...defaultOptions, ...options};
+  const prefixes = resolvePrefixPaths(combinedOptions.basedir, combinedOptions.prefixes);
+  const fs = options.fileSystem ? options.fileSystem : getFileSystem();
 
   return {
     name: 'swag-resolve',
@@ -21,4 +24,4 @@ let nodeResolve = (options: Options={}) => {
 export {
   Options,
   nodeResolve
-}
+};
