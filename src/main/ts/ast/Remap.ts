@@ -43,7 +43,7 @@ const remapImports = (fs: FileSystem, mainModuleCache: MainModuleCache, id: stri
 const remap = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, node: estree.Program): void => {
   const imports = readImports(node);
   const body = node.body.filter((n) => !isImport(n));
-  const remappedImports = remapImports(fs, mainModuleCache, id, imports);
+  const remappedImports = remapImports(fs, mainModuleCache as ObjectCache<MainModuleInfo>, id, imports);
   node.body = [].concat(toAst(remappedImports)).concat(body);
 };
 

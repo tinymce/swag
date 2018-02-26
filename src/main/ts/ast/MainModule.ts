@@ -3,7 +3,7 @@ import * as Exports from './Exports';
 import * as estree from 'estree';
 import { fail } from '../utils/Fail';
 
-interface MainModuleInfo {
+export interface MainModuleInfo {
   imports: Imports.ImportInfo[];
   exports: Exports.ExportInfo[];
 }
@@ -27,6 +27,5 @@ const readMainModule = (program: estree.Program): MainModuleInfo => {
 };
 
 export {
-  MainModuleInfo,
   readMainModule
 };
