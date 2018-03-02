@@ -8,13 +8,18 @@ import { createMainModuleCache, MainModuleCache } from '../ast/MainModuleCache';
 
 interface Options {
   fileSystem?: FileSystem;
+  forceFlat: boolean;
 }
 
-const transform = (fs: FileSystem, mainModuleCache: MainModuleCache) => (code: string, id: string): any => {
+const defaultOptions = {
+  forceFlat: true
+};
+
+const transform = (fs: FileSystem, mainModuleCache: MainModuleCache, forceFlat: boolean) => (code: string, id: string): any => {
   const program = parse(code);
 
   patch(program);
-  remap(fs, mainModuleCache, id, program);
+  remap(fs, mainModuleCache, id, program, forceFlat);
 
   const newCode = serialize(program);
 
@@ -24,13 +29,14 @@ const transform = (fs: FileSystem, mainModuleCache: MainModuleCache) => (code: s
   };
 };
 
-const remapImports = (options: Options= {}) => {
-  const fs = options.fileSystem ? options.fileSystem : getFileSystem();
+const remapImports = (options: Options = defaultOptions) => {
+  const combinedOptions = {...defaultOptions, ...options};
+  const fs = combinedOptions.fileSystem ? combinedOptions.fileSystem : getFileSystem();
   const mainModuleCache = createMainModuleCache();
 
   return {
     name: 'swag-remap-imports',
-    transform: transform(fs, mainModuleCache)
+    transform: transform(fs, mainModuleCache, combinedOptions.forceFlat)
   };
 };
 
