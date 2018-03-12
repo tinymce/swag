@@ -1,10 +1,11 @@
 import * as resolve from 'resolve';
 import * as path from 'path';
 import { FileSystem } from '../fs/FileSystem';
+import { fail } from '../utils/Fail';
 
 type Prefixes = any;
 
-const resolveSync = (fs: FileSystem, importee: string, importer: string): string => {
+const resolveSync = (fs: FileSystem, importee: string, importer: string, forceFlat: boolean): string => {
   const resolved = resolve.sync(
     importee,
     {
@@ -16,13 +17,26 @@ const resolveSync = (fs: FileSystem, importee: string, importer: string): string
   );
 
   if (resolved && fs.isFileSync(resolved)) {
+    if (forceFlat && !isFlat(resolved)) {
+      fail(forcedFlatMessage(importer, importee, resolved));
+    }
+
     return fs.realpathSync(resolved);
   } else {
     return resolved;
   }
 };
 
-const resolveUsingNode = (fs: FileSystem, importee: string, importer: string): Promise<string> => {
+const forcedFlatMessage = (importer: string, importee: string, resolved: string) => [
+    'Error non flat package structure detected:',
+    ' importer: ' + importer,
+    ' importee: ' + importee,
+    ' resolved: ' + resolved
+  ].join('\n');
+
+const isFlat = (id: string) => id.split('/').filter((p) => p === 'node_modules').length < 2;
+
+const resolveUsingNode = (fs: FileSystem, importee: string, importer: string, forceFlat: boolean): Promise<string> => {
   return new Promise((fulfil, reject) => {
     // console.log(importee, importer);
     resolve(
@@ -34,14 +48,13 @@ const resolveUsingNode = (fs: FileSystem, importee: string, importer: string): P
         preserveSymlinks: false
       }, (err, resolved) => {
         if (err) {
-          console.log(err);
           reject(err);
         } else {
-          if (resolved && fs.isFileSync(resolved)) {
-            resolved = fs.realpathSync(resolved);
+          if (forceFlat && !isFlat(resolved)) {
+            reject(forcedFlatMessage(importer, importee, resolved));
+          } else {
+            fulfil(fs.isFileSync(resolved) ? fs.realpathSync(resolved) : resolved);
           }
-
-          fulfil(resolved);
         }
       }
     );
@@ -77,13 +90,13 @@ const resolvePrefixPaths = (baseDir: string, prefixes: Prefixes): Prefixes => {
   return outPrefixes;
 };
 
-const resolveId = (fs: FileSystem, prefixes: Prefixes) => (importee: string, importer: string) => {
+const resolveId = (fs: FileSystem, prefixes: Prefixes, forceFlat: boolean) => (importee: string, importer: string) => {
   if (/\0/.test(importee) || !importer) { return null; }
 
   if (matchesPrefix(prefixes, importee)) {
     return resolvePrefix(prefixes, importee, importer);
   } else {
-    return resolveUsingNode(fs, importee, importer);
+    return resolveUsingNode(fs, importee, importer, forceFlat);
   }
 };
 

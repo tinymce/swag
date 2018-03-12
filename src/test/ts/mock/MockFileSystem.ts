@@ -1,6 +1,6 @@
 import { FileSystem } from '../../../main/ts/fs/FileSystem';
 
-interface File {
+export interface File {
   filePath: string;
   data: Buffer;
 }

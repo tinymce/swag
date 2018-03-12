@@ -32,7 +32,7 @@ describe('MainModule', () => {
 
   it('should throw error if the main module has other statements than imports/exports', () => {
     const read = () => {
-      const mainModule = readMainModule(parse(`
+      readMainModule(parse(`
         import * as A from './ModuleA';
 
         var x = {};

@@ -11,8 +11,8 @@ import { ObjectCache } from '../utils/ObjectCache';
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
 const isMainModuleImport = (modulePath: string) => /^@ephox\/\w+$/.test(modulePath);
 
-const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imp: ImportInfo): ImportInfo => {
-  const mainModulePath = resolveSync(fs, imp.modulePath, id);
+const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imp: ImportInfo, forceFlat: boolean): ImportInfo => {
+  const mainModulePath = resolveSync(fs, imp.modulePath, id, forceFlat);
 
   const mainModule = mainModuleCache.getOrThunk(mainModulePath, () => {
     const mainModuleProgram = parse(fs.readFileSync(mainModulePath).toString());
@@ -29,21 +29,21 @@ const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: strin
     fail(`Could not find import ${exportForImport.fromName} in main module ${mainModulePath}`);
   }
 
-  const resolvedModulePath = resolveSync(fs, mainImportFromExport.modulePath, mainModulePath);
+  const resolvedModulePath = resolveSync(fs, mainImportFromExport.modulePath, mainModulePath, forceFlat);
 
   return createImport(mainImportFromExport.kind, imp.name, mainImportFromExport.fromName, resolvedModulePath);
 };
 
-const remapImports = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imports: ImportInfo[]): ImportInfo[] => {
+const remapImports = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imports: ImportInfo[], forceFlat: boolean): ImportInfo[] => {
   return imports.map((imp) => {
-    return isMainModuleImport(imp.modulePath) ? remapImport(fs, mainModuleCache, id, imp) : imp;
+    return isMainModuleImport(imp.modulePath) ? remapImport(fs, mainModuleCache, id, imp, forceFlat) : imp;
   });
 };
 
-const remap = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, node: estree.Program): void => {
+const remap = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, node: estree.Program, forceFlat: boolean): void => {
   const imports = readImports(node);
   const body = node.body.filter((n) => !isImport(n));
-  const remappedImports = remapImports(fs, mainModuleCache, id, imports);
+  const remappedImports = remapImports(fs, mainModuleCache as ObjectCache<MainModuleInfo>, id, imports, forceFlat);
   node.body = [].concat(toAst(remappedImports)).concat(body);
 };
 
