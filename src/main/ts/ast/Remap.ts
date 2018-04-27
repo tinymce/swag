@@ -9,7 +9,10 @@ import { MainModuleCache } from './MainModuleCache';
 import { ObjectCache } from '../utils/ObjectCache';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
-const isMainModuleImport = (modulePath: string) => /^@ephox\/\w+$/.test(modulePath);
+const isWrapModuleImport = (path: string) => /^@ephox\/wrap\-[^\/]*/.test(path);
+const isGlobalsModuleImport = (path: string) => /^@ephox\/[^\-]+\-globals$/.test(path);
+const isEphoxModuleImport = (path: string) => /^@ephox\/[^\/]*$/.test(path);
+const isRemapTargetImport = (path: string) => isEphoxModuleImport(path) && !isGlobalsModuleImport(path) && !isWrapModuleImport(path);
 
 const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imp: ImportInfo, forceFlat: boolean): ImportInfo => {
   const mainModulePath = resolveSync(fs, imp.modulePath, id, forceFlat);
@@ -36,7 +39,7 @@ const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: strin
 
 const remapImports = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imports: ImportInfo[], forceFlat: boolean): ImportInfo[] => {
   return imports.map((imp) => {
-    return isMainModuleImport(imp.modulePath) ? remapImport(fs, mainModuleCache, id, imp, forceFlat) : imp;
+    return isRemapTargetImport(imp.modulePath) ? remapImport(fs, mainModuleCache, id, imp, forceFlat) : imp;
   });
 };
 
