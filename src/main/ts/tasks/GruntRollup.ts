@@ -10,7 +10,6 @@ const defaultInputOptions: Partial<InputOptions> = {
   preferConst: false,
   onwarn: null,
   plugins: null,
-  pureExternalModules: false,
   treeshake: true
 };
 
@@ -37,7 +36,7 @@ const defaultOptions = {
   ...defaultOutputOptions
 };
 
-export const task = (grunt: IGrunt) => {
+export const task = (grunt) => {
   grunt.registerMultiTask('rollup', 'rollup your grunt!', function () {
     const done = this.async();
     const options = this.options(defaultOptions);
@@ -61,7 +60,6 @@ export const task = (grunt: IGrunt) => {
       context: options.context,
       onwarn: options.onwarn,
       preferConst: options.preferConst,
-      pureExternalModules: options.pureExternalModules,
       treeshake: options.treeshake
     }).then((bundle) => bundle.generate({
       format: options.format,
