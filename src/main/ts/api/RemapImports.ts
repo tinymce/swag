@@ -1,6 +1,5 @@
 import { parse } from '../ast/Parser';
 import { serialize } from '../ast/Serializer';
-import { patch } from '../ast/PatchExports';
 import { remap } from '../ast/Remap';
 import { FileSystem } from '../fs/FileSystem';
 import { getFileSystem } from '../fs/CachedFileSystem';
@@ -18,7 +17,6 @@ const defaultOptions = {
 const transform = (fs: FileSystem, mainModuleCache: MainModuleCache, forceFlat: boolean) => (code: string, id: string): any => {
   const program = parse(code);
 
-  patch(program);
   remap(fs, mainModuleCache, id, program, forceFlat);
 
   const newCode = serialize(program);
