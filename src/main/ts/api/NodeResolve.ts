@@ -1,10 +1,11 @@
-import { Prefixes, resolvePrefixPaths, resolveId } from '../fs/Resolve';
+import { Prefixes, resolvePrefixPaths, resolveId, Mappers } from '../fs/Resolve';
 import { getFileSystem } from '../fs/CachedFileSystem';
 import { FileSystem } from '../fs/FileSystem';
 
 interface Options {
   basedir: string;
   prefixes: Prefixes;
+  mappers: Mappers;
   forceFlat: boolean;
   fileSystem?: FileSystem;
 }
@@ -12,6 +13,7 @@ interface Options {
 const defaultOptions = {
   basedir: '.',
   prefixes: [],
+  mappers: [],
   forceFlat: true
 };
 
@@ -22,7 +24,7 @@ const nodeResolve = (options: Options = defaultOptions) => {
 
   return {
     name: 'swag-resolve',
-    resolveId: resolveId(fs, prefixes, combinedOptions.forceFlat)
+    resolveId: resolveId(fs, prefixes, combinedOptions.mappers, combinedOptions.forceFlat)
   };
 };
 

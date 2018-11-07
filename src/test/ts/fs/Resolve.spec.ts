@@ -22,7 +22,7 @@ const mockFs = getFileSystem([
 
 describe('Resolve', () => {
   it('should resolve flat and deep id:s', async () => {
-    const resolver = resolveId(mockFs, {}, false);
+    const resolver = resolveId(mockFs, {}, [], false);
 
     try {
       const katamariPath1 = await resolver('@ephox/katamari', '/project/src/Main.js');
@@ -42,7 +42,7 @@ describe('Resolve', () => {
   });
 
   it('should only resolve flat id:s', async () => {
-    const resolver = resolveId(mockFs, {}, true);
+    const resolver = resolveId(mockFs, {}, [], true);
 
     try {
       const katamariPath1 = await resolver('@ephox/katamari', '/project/src/Main.js');
@@ -70,5 +70,14 @@ describe('Resolve', () => {
         ' resolved: /project/node_modules/@ephox/sugar/node_modules/@ephox/katamari/Main.js'
       ].join('\n'));
     }
+  });
+
+  it('should resolve using mapper', async () => {
+    const resolver = resolveId(mockFs, {}, [
+      (importee, importer) => '/prefix' + importee
+    ], false);
+
+    const resolvedPath = await resolver('@ephox/katamari', '/project/src/Main.js');
+    expect(resolvedPath).to.equal('/prefix/project/node_modules/@ephox/katamari/Main.js');
   });
 });

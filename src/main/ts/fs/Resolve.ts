@@ -4,6 +4,7 @@ import { FileSystem } from '../fs/FileSystem';
 import { fail } from '../utils/Fail';
 
 type Prefixes = any;
+type Mappers = Array<(importee: string, importer: string) => string>;
 
 const resolveSync = (fs: FileSystem, importee: string, importer: string, forceFlat: boolean): string => {
   const resolved = resolve.sync(
@@ -90,18 +91,23 @@ const resolvePrefixPaths = (baseDir: string, prefixes: Prefixes): Prefixes => {
   return outPrefixes;
 };
 
-const resolveId = (fs: FileSystem, prefixes: Prefixes, forceFlat: boolean) => (importee: string, importer: string) => {
+const runMappers = (importer: string, mappers: Mappers) => (resolvedImportee: string) => {
+  return Promise.resolve(mappers.reduce((p, f) => f(p, importer), resolvedImportee));
+};
+
+const resolveId = (fs: FileSystem, prefixes: Prefixes, mappers: Mappers, forceFlat: boolean) => (importee: string, importer: string) => {
   if (/\0/.test(importee) || !importer) { return null; }
 
   if (matchesPrefix(prefixes, importee)) {
     return resolvePrefix(prefixes, importee, importer);
   } else {
-    return resolveUsingNode(fs, importee, importer, forceFlat);
+    return resolveUsingNode(fs, importee, importer, forceFlat).then(runMappers(importer, mappers));
   }
 };
 
 export {
   Prefixes,
+  Mappers,
   resolveSync,
   resolvePrefixPaths,
   resolveId
