@@ -25,11 +25,23 @@ export default {
   footer: '})()',
   plugins: [
     swag.nodeResolve({
+      // Base dir to resolve paths from
       basedir: __dirname,
+
+      // Replaces the prefixes with the specified replacement path
       prefixes: {
         'tinymce/core': 'src/core/dist/globals/tinymce/core',
         'tinymce/ui': 'lib/ui/main/ts'
-      }
+      },
+
+      // Maps resolved importees to new resolved importee paths
+      mappers: [
+        // Imports resolving to './lib/core/main/ts/api' gets replaced with './lib/globals/tinymce/core/api'
+        swag.mappers.replaceDir('./lib/core/main/ts/api', './lib/globals/tinymce/core/api'),
+
+        // Imports resolving to './lib/core/main/ts' throws an error
+        swag.mappers.invalidDir('./lib/core/main/ts')
+      ]
     }),
     swag.remapImports()
   ],
