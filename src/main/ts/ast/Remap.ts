@@ -27,7 +27,7 @@ const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: strin
     fail(`Could not find export ${imp.fromName} in main module ${mainModulePath}`);
   }
 
-  const mainImportFromExport = mainModule.imports.find((imp) => imp.name === exportForImport.fromName);
+  const mainImportFromExport = mainModule.imports.find((mi) => mi.name === exportForImport.fromName);
   if (!exportForImport) {
     fail(`Could not find import ${exportForImport.fromName} in main module ${mainModulePath}`);
   }

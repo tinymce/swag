@@ -1,6 +1,5 @@
-import * as rollup from 'rollup';
 import * as path from 'path';
-import { InputOptions, OutputOptions } from 'rollup';
+import { rollup, InputOptions, OutputOptions } from 'rollup';
 
 const isFunction = (val: any): val is Function => typeof val === 'function';
 
@@ -52,7 +51,7 @@ export const task = (grunt) => {
       grunt.fail.warn('Entry point "' + input + '" not found.');
     }
 
-    rollup.rollup({
+    rollup({
       cache: options.cache,
       input,
       external: options.external,
