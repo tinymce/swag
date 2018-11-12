@@ -44,6 +44,15 @@ const resolveUsingNode = (fs: FileSystem, importee: string, importer: string, fo
       importee,
       {
         basedir: path.dirname(importer),
+        packageFilter(pkg, pkgPath) {
+          if (pkg.module) {
+            pkg.main = pkg.module;
+          } else if (pkg['jsnext:main']) {
+            pkg.main = pkg['jsnext:main'];
+          }
+
+          return pkg;
+        },
         isFile: fs.isFile,
         readFile: fs.readFile,
         preserveSymlinks: false

@@ -40,7 +40,10 @@ describe('Imports', () => {
   });
 
   it('createImport should produce a object with all items', () => {
-    const kind = 'kind', fromName = 'fromName', name = 'name', modulePath = 'modulePath';
+    const kind = 'kind';
+    const fromName = 'fromName';
+    const name = 'name';
+    const modulePath = 'modulePath';
 
     const imp = createImport(kind, name, fromName, modulePath);
 

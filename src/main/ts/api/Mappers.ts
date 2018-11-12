@@ -17,8 +17,8 @@ const replaceDir = (oldDir: string, newDir: string) => {
   };
 };
 
-const invalidDir = (invalidDir: string) => {
-  const invalidDirPath = path.resolve(invalidDir);
+const invalidDir = (dir: string) => {
+  const invalidDirPath = path.resolve(dir);
 
   return (importee, importer) => {
     if (isChildOf(importee, invalidDirPath)) {
