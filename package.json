@@ -24,29 +24,28 @@
   "types": "./lib/main/ts/api/Main.d.ts",
   "dependencies": {
     "@types/escodegen": "0.0.6",
-    "@types/estree": "0.0.38",
-    "@types/node": "^8.5.1",
-    "acorn": "^5.2.1",
-    "escodegen": "^1.9.0",
-    "magic-string": "^0.22.4",
-    "resolve": "^1.5.0",
-    "rollup": "^0.66.6"
+    "@types/estree": "0.0.39",
+    "@types/node": "^8.10.39",
+    "acorn": "^6.0.7",
+    "escodegen": "^1.11.0",
+    "magic-string": "^0.22.5",
+    "resolve": "^1.10.0",
+    "rollup": "^1.1.2"
   },
   "devDependencies": {
     "@ephox/tslint-rules": "latest",
     "@types/acorn": "^4.0.3",
-    "@types/chai": "^4.1.2",
-    "@types/chokidar": "^1.7.4",
-    "@types/grunt": "^0.4.22",
-    "@types/mocha": "^2.2.44",
-    "@types/rollup": "^0.54.0",
-    "chai": "^4.1.2",
+    "@types/chai": "^4.1.7",
+    "@types/chokidar": "^1.7.5",
+    "@types/grunt": "^0.4.24",
+    "@types/mocha": "^2.2.48",
+    "chai": "^4.2.0",
     "command-line-args": "^4.0.7",
-    "mocha": "^4.0.1",
-    "nlf": "^2.0.0",
+    "mocha": "^4.1.0",
+    "nlf": "^2.0.1",
     "ts-node": "^4.1.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.6.2"
+    "tslint": "^5.12.1",
+    "typescript": "^3.1.6"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

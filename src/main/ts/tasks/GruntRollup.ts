@@ -1,12 +1,13 @@
 import * as path from 'path';
-import { rollup, InputOptions, OutputOptions } from 'rollup';
+import { rollup, InputOptions, OutputOptions, OutputChunk, OutputAsset } from 'rollup';
 
 const isFunction = (val: any): val is Function => typeof val === 'function';
+
+const isOutputChunk = (output: OutputChunk | OutputAsset): output is OutputChunk => output.hasOwnProperty('map');
 
 const defaultInputOptions: Partial<InputOptions> = {
   cache: null,
   external: [],
-  preferConst: false,
   onwarn: null,
   plugins: null,
   treeshake: true
@@ -16,7 +17,9 @@ const defaultOutputOptions: Partial<OutputOptions> = {
   name: null,
   format: 'es',
   exports: 'auto',
-  moduleId: null,
+  amd: {
+    id: null
+  },
   globals: {},
   indent: true,
   strict: true,
@@ -25,6 +28,7 @@ const defaultOutputOptions: Partial<OutputOptions> = {
   intro: null,
   outro: null,
   paths: null,
+  preferConst: false,
   sourcemap: false,
   sourcemapFile: null,
   interop: true
@@ -58,7 +62,9 @@ export const task = (grunt) => {
       plugins,
       context: options.context,
       onwarn: options.onwarn,
-      preferConst: options.preferConst,
+      output: {
+        preferConst: options.preferConst
+      },
       treeshake: options.treeshake
     }).then((bundle) => bundle.generate({
       format: options.format,
@@ -75,14 +81,22 @@ export const task = (grunt) => {
       sourcemap: options.sourcemap,
       sourcemapFile: options.sourcemapFile
     })).then((result) => {
-      if (options.sourcemap === true) {
-        const sourceMapOutPath = file.dest + '.map';
-        grunt.file.write(sourceMapOutPath, result.map.toString());
-        grunt.file.write(file.dest, `${result.code}\n//# sourceMappingURL=${path.basename(sourceMapOutPath)}`);
-      } else if (options.sourcemap === 'inline') {
-        grunt.file.write(file.dest, `${result.code}\n//# sourceMappingURL=${result.map.toUrl()}`);
-      } else {
-        grunt.file.write(file.dest, result.code);
+      const outputs = result.output;
+      for (let i = 0; i < outputs.length; i++) {
+        const output = outputs[i];
+        if (isOutputChunk(output)) {
+          if (options.sourcemap === true) {
+            const sourceMapOutPath = file.dest + '.map';
+            grunt.file.write(sourceMapOutPath, output.map.toString());
+            grunt.file.write(file.dest, `${output.code}\n//# sourceMappingURL=${path.basename(sourceMapOutPath)}`);
+          } else if (options.sourcemap === 'inline') {
+            grunt.file.write(file.dest, `${output.code}\n//# sourceMappingURL=${output.map.toUrl()}`);
+          } else {
+            grunt.file.write(file.dest, output.code);
+          }
+        } else {
+          grunt.file.write(file.dest, output.code);
+        }
       }
 
       done();
