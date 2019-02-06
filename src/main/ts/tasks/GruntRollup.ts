@@ -100,8 +100,7 @@ export const task = (grunt) => {
       sourcemapFile: options.sourcemapFile
     })).then((result) => {
       const outputs = result.output;
-      for (let i = 0; i < outputs.length; i++) {
-        const output = outputs[i];
+      for (const output of outputs) {
         if (isOutputChunk(output)) {
           if (options.sourcemap === true) {
             const sourceMapOutPath = file.dest + '.map';
