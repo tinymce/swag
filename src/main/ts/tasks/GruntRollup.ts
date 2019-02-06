@@ -39,10 +39,28 @@ const defaultOptions = {
   ...defaultOutputOptions
 };
 
+// This is a workaround to get dom-globals to work and not have to bundle the entire module
+// TODO find a better way to map dom-globals to their relevant global properties
+const patchOptions = (options) => {
+  const newOptions = {
+    external: [],
+    globals: {},
+    ...options
+  };
+  // Make dom-globals and external dep and then map it to the window object
+  if (newOptions.external.indexOf('@ephox/dom-globals') === -1) {
+    newOptions.external.push('@ephox/dom-globals');
+  }
+  if (!newOptions.globals.hasOwnProperty('@ephox/dom-globals')) {
+    newOptions.globals['@ephox/dom-globals'] = 'window';
+  }
+  return newOptions;
+};
+
 export const task = (grunt) => {
   grunt.registerMultiTask('rollup', 'rollup your grunt!', function () {
     const done = this.async();
-    const options = this.options(defaultOptions);
+    const options = patchOptions(this.options(defaultOptions));
     const file = this.files[0];
     const input = file.src[0];
     const plugins = isFunction(options.plugins) ? options.plugins() : options.plugins;
