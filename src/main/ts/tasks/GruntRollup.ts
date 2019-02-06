@@ -47,13 +47,11 @@ const patchOptions = (options) => {
     globals: {},
     ...options
   };
-  // Make dom-globals and external dep and then map it to the window object
+  // Make dom-globals an external dep and then map it to the window object
   if (newOptions.external.indexOf('@ephox/dom-globals') === -1) {
     newOptions.external.push('@ephox/dom-globals');
   }
-  if (!newOptions.globals.hasOwnProperty('@ephox/dom-globals')) {
-    newOptions.globals['@ephox/dom-globals'] = 'window';
-  }
+  newOptions.globals['@ephox/dom-globals'] = 'window';
   return newOptions;
 };
 
