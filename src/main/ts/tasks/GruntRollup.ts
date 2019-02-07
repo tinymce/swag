@@ -1,12 +1,13 @@
 import * as path from 'path';
-import { rollup, InputOptions, OutputOptions } from 'rollup';
+import { rollup, InputOptions, OutputOptions, OutputChunk, OutputAsset } from 'rollup';
 
 const isFunction = (val: any): val is Function => typeof val === 'function';
+
+const isOutputChunk = (output: OutputChunk | OutputAsset): output is OutputChunk => output.hasOwnProperty('map');
 
 const defaultInputOptions: Partial<InputOptions> = {
   cache: null,
   external: [],
-  preferConst: false,
   onwarn: null,
   plugins: null,
   treeshake: true
@@ -16,7 +17,9 @@ const defaultOutputOptions: Partial<OutputOptions> = {
   name: null,
   format: 'es',
   exports: 'auto',
-  moduleId: null,
+  amd: {
+    id: null
+  },
   globals: {},
   indent: true,
   strict: true,
@@ -25,6 +28,7 @@ const defaultOutputOptions: Partial<OutputOptions> = {
   intro: null,
   outro: null,
   paths: null,
+  preferConst: false,
   sourcemap: false,
   sourcemapFile: null,
   interop: true
@@ -35,10 +39,26 @@ const defaultOptions = {
   ...defaultOutputOptions
 };
 
+// This is a workaround to get dom-globals to work and not have to bundle the entire module
+// TODO find a better way to map dom-globals to their relevant global properties
+const patchOptions = (options) => {
+  const newOptions = {
+    external: [],
+    globals: {},
+    ...options
+  };
+  // Make dom-globals an external dep and then map it to the window object
+  if (newOptions.external.indexOf('@ephox/dom-globals') === -1) {
+    newOptions.external.push('@ephox/dom-globals');
+  }
+  newOptions.globals['@ephox/dom-globals'] = 'window';
+  return newOptions;
+};
+
 export const task = (grunt) => {
   grunt.registerMultiTask('rollup', 'rollup your grunt!', function () {
     const done = this.async();
-    const options = this.options(defaultOptions);
+    const options = patchOptions(this.options(defaultOptions));
     const file = this.files[0];
     const input = file.src[0];
     const plugins = isFunction(options.plugins) ? options.plugins() : options.plugins;
@@ -58,7 +78,9 @@ export const task = (grunt) => {
       plugins,
       context: options.context,
       onwarn: options.onwarn,
-      preferConst: options.preferConst,
+      output: {
+        preferConst: options.preferConst
+      },
       treeshake: options.treeshake
     }).then((bundle) => bundle.generate({
       format: options.format,
@@ -75,14 +97,21 @@ export const task = (grunt) => {
       sourcemap: options.sourcemap,
       sourcemapFile: options.sourcemapFile
     })).then((result) => {
-      if (options.sourcemap === true) {
-        const sourceMapOutPath = file.dest + '.map';
-        grunt.file.write(sourceMapOutPath, result.map.toString());
-        grunt.file.write(file.dest, `${result.code}\n//# sourceMappingURL=${path.basename(sourceMapOutPath)}`);
-      } else if (options.sourcemap === 'inline') {
-        grunt.file.write(file.dest, `${result.code}\n//# sourceMappingURL=${result.map.toUrl()}`);
-      } else {
-        grunt.file.write(file.dest, result.code);
+      const outputs = result.output;
+      for (const output of outputs) {
+        if (isOutputChunk(output)) {
+          if (options.sourcemap === true) {
+            const sourceMapOutPath = file.dest + '.map';
+            grunt.file.write(sourceMapOutPath, output.map.toString());
+            grunt.file.write(file.dest, `${output.code}\n//# sourceMappingURL=${path.basename(sourceMapOutPath)}`);
+          } else if (options.sourcemap === 'inline') {
+            grunt.file.write(file.dest, `${output.code}\n//# sourceMappingURL=${output.map.toUrl()}`);
+          } else {
+            grunt.file.write(file.dest, output.code);
+          }
+        } else {
+          grunt.file.write(file.dest, output.code);
+        }
       }
 
       done();
