@@ -33,7 +33,7 @@
     "rollup": "^1.1.2"
   },
   "devDependencies": {
-    "@ephox/tslint-rules": "latest",
+    "@ephox/tslint-rules": "^1.0.6",
     "@types/acorn": "^4.0.3",
     "@types/chai": "^4.1.7",
     "@types/chokidar": "^1.7.5",
