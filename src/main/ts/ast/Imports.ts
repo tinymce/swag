@@ -1,5 +1,6 @@
 import * as estree from 'estree';
 import { fail } from '../utils/Fail';
+import { serialize } from './Serializer';
 
 interface ImportInfo {
   kind: string;       // default, namespace, specified
@@ -119,9 +120,18 @@ const toAst = (imports: ImportInfo[]): estree.ImportDeclaration[] => {
   });
 };
 
+const toSource = (imports: ImportInfo[]): string => {
+  return serialize({
+    type: 'Program',
+    body: toAst(imports),
+    sourceType: 'module'
+  });
+};
+
 export {
   ImportInfo,
   readImports,
   createImport,
-  toAst
+  toAst,
+  toSource
 };
