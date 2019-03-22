@@ -2,6 +2,7 @@ import { readMainModule } from '../../../main/ts/ast/MainModule';
 import { parse } from '../../../main/ts/ast/Parser';
 import { expect } from 'chai';
 import 'mocha';
+import { ImportInfoKind } from '../../../main/ts/ast/Imports';
 
 describe('MainModule', () => {
   it('readMainModule should read the various imports/exports formats correctly', () => {
@@ -15,7 +16,7 @@ describe('MainModule', () => {
 
     expect(mainModule.imports).to.eql([
       {
-        kind: 'namespace',
+        kind: ImportInfoKind.Namespace,
         fromName: 'A',
         name: 'A',
         modulePath: './ModuleA'

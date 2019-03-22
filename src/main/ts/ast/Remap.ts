@@ -1,5 +1,5 @@
 import * as estree from 'estree';
-import { readImports, toAst, createImport, ImportInfo } from './Imports';
+import { readImports, toAst, createImport, ImportInfo, ImportInfoKind } from './Imports';
 import { resolveSync } from '../fs/Resolve';
 import { FileSystem } from '../fs/FileSystem';
 import { readMainModule, MainModuleInfo } from '../ast/MainModule';
@@ -39,7 +39,7 @@ const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: strin
 
 const remapImports = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imports: ImportInfo[], forceFlat: boolean): ImportInfo[] => {
   return imports.map((imp) => {
-    return isRemapTargetImport(imp.modulePath) ? remapImport(fs, mainModuleCache, id, imp, forceFlat) : imp;
+    return isRemapTargetImport(imp.modulePath) && imp.kind !== ImportInfoKind.SideEffect ? remapImport(fs, mainModuleCache, id, imp, forceFlat) : imp;
   });
 };
 

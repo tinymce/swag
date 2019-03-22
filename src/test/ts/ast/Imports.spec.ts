@@ -1,4 +1,4 @@
-import { readImports, createImport, toAst } from '../../../main/ts/ast/Imports';
+import { readImports, createImport, toAst, ImportInfoKind } from '../../../main/ts/ast/Imports';
 import { parse } from '../../../main/ts/ast/Parser';
 import { expect } from 'chai';
 import 'mocha';
@@ -9,38 +9,45 @@ describe('Imports', () => {
       import * as ModuleA from './ModuleA';
       import { a, b as B } from './ModuleB';
       import ModuleC from './ModuleC';
+      import './ModuleD';
     `));
 
     expect(imports).to.eql([
       {
-        kind: 'namespace',
+        kind: ImportInfoKind.Namespace,
         fromName: 'ModuleA',
         name: 'ModuleA',
         modulePath: './ModuleA'
       },
       {
-        kind: 'specified',
+        kind: ImportInfoKind.Specified,
         fromName: 'a',
         name: 'a',
         modulePath: './ModuleB'
       },
       {
-        kind: 'specified',
+        kind: ImportInfoKind.Specified,
         fromName: 'b',
         name: 'B',
         modulePath: './ModuleB'
       },
       {
-        kind: 'default',
+        kind: ImportInfoKind.Default,
         fromName: 'ModuleC',
         name: 'ModuleC',
         modulePath: './ModuleC'
+      },
+      {
+        kind: ImportInfoKind.SideEffect,
+        fromName: null,
+        name: null,
+        modulePath: './ModuleD'
       },
     ]);
   });
 
   it('createImport should produce a object with all items', () => {
-    const kind = 'kind';
+    const kind = ImportInfoKind.Default;
     const fromName = 'fromName';
     const name = 'name';
     const modulePath = 'modulePath';
@@ -57,9 +64,10 @@ describe('Imports', () => {
 
   it('toAst should produce the expected ast from imports', () => {
     const ast = toAst([
-      createImport('default', 'A', 'A', './A'),
-      createImport('namespace', 'B2', 'B', './B'),
-      createImport('specified', 'C2', 'C', './C')
+      createImport(ImportInfoKind.Default, 'A', 'A', './A'),
+      createImport(ImportInfoKind.Namespace, 'B2', 'B', './B'),
+      createImport(ImportInfoKind.Specified, 'C2', 'C', './C'),
+      createImport(ImportInfoKind.SideEffect, null, null, './D')
     ]);
 
     expect(ast).to.eql([
@@ -118,6 +126,16 @@ describe('Imports', () => {
           type: 'Literal',
           value: './C',
           raw: `'./C'`
+        }
+      },
+
+      {
+        type: 'ImportDeclaration',
+        specifiers: [],
+        source: {
+          type: 'Literal',
+          value: './D',
+          raw: `'./D'`
         }
       }
     ]);
