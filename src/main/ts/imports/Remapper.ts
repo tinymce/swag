@@ -18,7 +18,12 @@ export const createRemapper = (fs: FileSystem = getFileSystem()): Remapper => {
 
   return (code: string, id: string) => {
     const program = parse(code);
-    remap(fs, mainModuleCache, id, program, true);
+
+    // This doesn't force flat mode since in webpack dev mode we want the user to be able
+    // to just copy or symlink in a project and that could project could contain node_modules.
+    // TODO: In the future we should probably ignore the package node_modules and favor the root node_modules
+    remap(fs, mainModuleCache, id, program, false);
+
     return serialize(program);
   };
 };
