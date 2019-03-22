@@ -53,6 +53,22 @@ export default {
 };
 ```
 
+### Using the webpack remapper loader
+
+Add the remapper loader first to the list of webpack loaders this will then change all the imports to go directly to the api modules. It handles both ts files and js files.
+
+```
+module: {
+  rules: [
+    {
+      test: /\.js|\.ts$/,
+      use: ['@ephox/swag/webpack/remapper']
+    },
+    ....
+  ]
+}
+```
+
 ### Publishing & legal
 
 1. If you add new packages remember to re-generate the LEGAL.txt by running the `./bin/generate-legal.js` script.

@@ -1,6 +1,6 @@
 Dependency:
   name: @ephox/swag
-  version: 4.0.0
+  version: 4.1.0
   repository: https://github.com/ephox/swag
   licenses: Apache-2.0
 
@@ -1079,6 +1079,12 @@ Dependency:
   licenses: Apache-2.0
 
 Dependency:
+  name: source-list-map
+  version: 2.0.1
+  repository: https://github.com/webpack/source-list-map
+  licenses: MIT
+
+Dependency:
   name: source-map
   version: 0.6.1
   repository: http://github.com/mozilla/source-map
@@ -1292,6 +1298,12 @@ Dependency:
   name: vlq
   version: 0.2.3
   repository: (none)
+  licenses: MIT
+
+Dependency:
+  name: webpack-sources
+  version: 1.3.0
+  repository: https://github.com/webpack/webpack-sources
   licenses: MIT
 
 Dependency:

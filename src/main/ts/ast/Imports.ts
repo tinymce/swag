@@ -1,30 +1,38 @@
 import * as estree from 'estree';
 import { fail } from '../utils/Fail';
+import { serialize } from './Serializer';
 
-interface ImportInfo {
-  kind: string;       // default, namespace, specified
-  name: string;       // Output module name
-  fromName: string;   // Input name in a specified import
-  modulePath: string;  // Relative filepath
+export enum ImportInfoKind {
+  Default,
+  Namespace,
+  Specified,
+  SideEffect
 }
 
-const createImport = (kind: string, name: string, fromName: string, modulePath: string): ImportInfo => {
+interface ImportInfo {
+  kind: ImportInfoKind; // default, namespace, specified, sideeffect
+  name: string;         // Output module name
+  fromName: string;     // Input name in a specified import
+  modulePath: string;   // Relative filepath
+}
+
+const createImport = (kind: ImportInfoKind, name: string, fromName: string, modulePath: string): ImportInfo => {
   return { kind, name, fromName, modulePath };
 };
 
 const readDefaultSpecifier = (modulePath: string, specifier: estree.ImportDefaultSpecifier): ImportInfo => {
-  return createImport('default', specifier.local.name, specifier.local.name, modulePath);
+  return createImport(ImportInfoKind.Default, specifier.local.name, specifier.local.name, modulePath);
 };
 
 const readNamespaceSpecifier = (modulePath: string, specifier: estree.ImportNamespaceSpecifier): ImportInfo => {
-  return createImport('namespace', specifier.local.name, specifier.local.name, modulePath);
+  return createImport(ImportInfoKind.Namespace, specifier.local.name, specifier.local.name, modulePath);
 };
 
 const readImportSpecifier = (modulePath: string, specifier: estree.ImportSpecifier): ImportInfo => {
-  return createImport('specified', specifier.local.name, specifier.imported.name, modulePath);
+  return createImport(ImportInfoKind.Specified, specifier.local.name, specifier.imported.name, modulePath);
 };
 
-const readImportDeclaration = (node: estree.ImportDeclaration) => {
+const readImportSpecifiers = (node: estree.ImportDeclaration) => {
   return node.specifiers.map((specifier) => {
     if (specifier.type === 'ImportDefaultSpecifier') {
       const name = node.source.value as string;
@@ -42,6 +50,20 @@ const readImportDeclaration = (node: estree.ImportDeclaration) => {
   });
 };
 
+const readSideEffectImport = (node: estree.ImportDeclaration) => {
+  if (node.source && node.source.type === 'Literal') {
+    const name = node.source.value as string;
+    return createImport(ImportInfoKind.SideEffect, null, null, name);
+  } else {
+    fail('Unknown import type.');
+    return null;
+  }
+};
+
+const readImportDeclaration = (node: estree.ImportDeclaration) => {
+  return node.specifiers.length > 0 ? readImportSpecifiers(node) : readSideEffectImport(node);
+};
+
 const readImports = (program: estree.Program): ImportInfo[] => {
   return program.body.reduce((acc, node) => {
     if (node.type === 'ImportDeclaration') {
@@ -55,7 +77,7 @@ const readImports = (program: estree.Program): ImportInfo[] => {
 
 const toAst = (imports: ImportInfo[]): estree.ImportDeclaration[] => {
   return imports.map((imp) => {
-    if (imp.kind === 'default') {
+    if (imp.kind === ImportInfoKind.Default) {
       return {
         type: 'ImportDeclaration',
         specifiers: [
@@ -73,7 +95,7 @@ const toAst = (imports: ImportInfo[]): estree.ImportDeclaration[] => {
           raw: `'${imp.modulePath}'`
         }
       } as estree.ImportDeclaration;
-    } else if (imp.kind === 'namespace') {
+    } else if (imp.kind === ImportInfoKind.Namespace) {
       return {
         type: 'ImportDeclaration',
         specifiers: [
@@ -91,7 +113,7 @@ const toAst = (imports: ImportInfo[]): estree.ImportDeclaration[] => {
           raw: `'${imp.modulePath}'`
         }
       } as estree.ImportDeclaration;
-    } else if (imp.kind === 'specified') {
+    } else if (imp.kind === ImportInfoKind.Specified) {
       return {
         type: 'ImportDeclaration',
         specifiers: [
@@ -113,9 +135,27 @@ const toAst = (imports: ImportInfo[]): estree.ImportDeclaration[] => {
           raw: `'${imp.modulePath}'`
         }
       } as estree.ImportDeclaration;
+    } else if (imp.kind === ImportInfoKind.SideEffect) {
+      return {
+        type: 'ImportDeclaration',
+        specifiers: [],
+        source: {
+          type: 'Literal',
+          value: imp.modulePath,
+          raw: `'${imp.modulePath}'`
+        }
+      } as estree.ImportDeclaration;
     } else {
       return null;
     }
+  });
+};
+
+const toSource = (imports: ImportInfo[]): string => {
+  return serialize({
+    type: 'Program',
+    body: toAst(imports),
+    sourceType: 'module'
   });
 };
 
@@ -123,5 +163,6 @@ export {
   ImportInfo,
   readImports,
   createImport,
-  toAst
+  toAst,
+  toSource
 };

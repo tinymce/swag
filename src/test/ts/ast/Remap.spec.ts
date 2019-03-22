@@ -110,4 +110,20 @@ describe('Remap', () => {
       `import FormData from '/project/node_modules/@ephox/something/node_modules/@ephox/sand/FormData.js';`
     ].join('\n'));
   });
+
+  it('should passthough side effect imports', () => {
+    const mockFs = getFileSystem(mockFiles);
+
+    const program = parse(`
+      import 'something';
+      import '@ephox/katamari'
+    `);
+
+    remap(mockFs, createMainModuleCache(), '/project/src/main/ts/Module.js', program, true);
+
+    expect(serialize(program)).to.equal([
+      `import 'something';`,
+      `import '@ephox/katamari';`
+    ].join('\n'));
+  });
 });

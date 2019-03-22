@@ -7,7 +7,8 @@
     "declaration": true,
     "sourceMap": false,
     "noUnusedLocals": true,
-    "outDir": "lib"
+    "outDir": "lib",
+    "types": ["node"]
   },
   "include": [
     "src/main/ts",
