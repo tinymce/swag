@@ -3,7 +3,7 @@ import { serialize } from '../ast/Serializer';
 import { remap } from '../ast/Remap';
 import { FileSystem } from '../fs/FileSystem';
 import { getFileSystem } from '../fs/CachedFileSystem';
-import { createMainModuleCache, MainModuleCache } from '../ast/MainModuleCache';
+import { createRemapCache, RemapCache } from '../ast/RemapCache';
 
 interface Options {
   fileSystem?: FileSystem;
@@ -14,10 +14,10 @@ const defaultOptions = {
   forceFlat: true
 };
 
-const transform = (fs: FileSystem, mainModuleCache: MainModuleCache, forceFlat: boolean) => (code: string, id: string): any => {
+const transform = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean) => (code: string, id: string): any => {
   const program = parse(code);
 
-  remap(fs, mainModuleCache, id, program, forceFlat);
+  remap(fs, remapCache, id, program, forceFlat);
 
   const newCode = serialize(program);
 
@@ -30,11 +30,11 @@ const transform = (fs: FileSystem, mainModuleCache: MainModuleCache, forceFlat: 
 const remapImports = (options: Options = defaultOptions) => {
   const combinedOptions = {...defaultOptions, ...options};
   const fs = combinedOptions.fileSystem ? combinedOptions.fileSystem : getFileSystem();
-  const mainModuleCache = createMainModuleCache();
+  const remapCache = createRemapCache();
 
   return {
     name: 'swag-remap-imports',
-    transform: transform(fs, mainModuleCache, combinedOptions.forceFlat)
+    transform: transform(fs, remapCache, combinedOptions.forceFlat)
   };
 };
 

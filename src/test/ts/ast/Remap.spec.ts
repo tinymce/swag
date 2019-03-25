@@ -2,10 +2,10 @@ import { remap } from '../../../main/ts/ast/Remap';
 import { parse } from '../../../main/ts/ast/Parser';
 import { serialize } from '../../../main/ts/ast/Serializer';
 import { getFileSystem, createFile, createJsonFile } from '../mock/MockFileSystem';
-import { createMainModuleCache } from '../../../main/ts/ast/MainModuleCache';
 import { expect } from 'chai';
 import 'mocha';
 import { fail } from 'assert';
+import { createRemapCache } from '../../../main/ts/ast/RemapCache';
 
 const mockFiles = [
   createJsonFile('/project/node_modules/@ephox/katamari/package.json', {
@@ -62,7 +62,7 @@ describe('Remap', () => {
       import { Fun, Arr, Arr2, noop } from '@ephox/katamari'
     `);
 
-    remap(mockFs, createMainModuleCache(), '/project/src/main/ts/Module.js', program, true);
+    remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
 
     expect(serialize(program)).to.equal([
       `import * as Fun from '/project/node_modules/@ephox/katamari/Fun.js';`,
@@ -80,7 +80,7 @@ describe('Remap', () => {
     `);
 
     try {
-      remap(mockFs, createMainModuleCache(), '/project/node_modules/@ephox/something/Module.js', program, true);
+      remap(mockFs, createRemapCache(), '/project/node_modules/@ephox/something/Module.js', program, true);
 
       fail('Should never get here');
     } catch (e) {
@@ -101,7 +101,7 @@ describe('Remap', () => {
     `);
 
     try {
-      remap(mockFs, createMainModuleCache(), '/project/node_modules/@ephox/something/Module.js', program, false);
+      remap(mockFs, createRemapCache(), '/project/node_modules/@ephox/something/Module.js', program, false);
     } catch (e) {
       fail('Should never get here');
     }
@@ -119,7 +119,7 @@ describe('Remap', () => {
       import '@ephox/katamari'
     `);
 
-    remap(mockFs, createMainModuleCache(), '/project/src/main/ts/Module.js', program, true);
+    remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
 
     expect(serialize(program)).to.equal([
       `import 'something';`,
