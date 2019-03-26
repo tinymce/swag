@@ -2,11 +2,10 @@ import * as estree from 'estree';
 import { readImports, toAst, createImport, ImportInfo, ImportInfoKind } from './Imports';
 import { resolveSync } from '../fs/Resolve';
 import { FileSystem } from '../fs/FileSystem';
-import { readMainModule, MainModuleInfo } from '../ast/MainModule';
+import { readMainModule } from '../ast/MainModule';
 import { parse } from '../ast/Parser';
 import { fail } from '../utils/Fail';
-import { MainModuleCache } from './MainModuleCache';
-import { ObjectCache } from '../utils/ObjectCache';
+import { RemapCache } from './RemapCache';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
 const isWrapModuleImport = (path: string) => /^@ephox\/wrap\-[^\/]*/.test(path);
@@ -14,10 +13,19 @@ const isGlobalsModuleImport = (path: string) => /^@ephox\/[^\-]+\-globals$/.test
 const isEphoxModuleImport = (path: string) => /^@ephox\/[^\/]*$/.test(path);
 const isRemapTargetImport = (path: string) => isEphoxModuleImport(path) && !isGlobalsModuleImport(path) && !isWrapModuleImport(path);
 
-const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imp: ImportInfo, forceFlat: boolean): ImportInfo => {
-  const mainModulePath = resolveSync(fs, imp.modulePath, id, forceFlat);
+const findRootName = (modulePath: string) => {
+  const parts = modulePath.split('/');
+  const idx = parts.lastIndexOf('node_modules');
+  return idx !== -1 ? parts.slice(0, idx).join('/') : '/';
+};
 
-  const mainModule = mainModuleCache.getOrThunk(mainModulePath, () => {
+const remapImport = (fs: FileSystem, remapCache: RemapCache, id: string, imp: ImportInfo, forceFlat: boolean): ImportInfo => {
+  const mainModulePath = remapCache.mainModuleResolveCache.getOrThunk(
+    findRootName(id) + '-' + imp.modulePath,
+    () => resolveSync(fs, imp.modulePath, id, forceFlat)
+  );
+
+  const mainModule = remapCache.mainModuleCache.getOrThunk(mainModulePath, () => {
     const mainModuleProgram = parse(fs.readFileSync(mainModulePath).toString());
     return readMainModule(mainModuleProgram);
   });
@@ -32,21 +40,24 @@ const remapImport = (fs: FileSystem, mainModuleCache: MainModuleCache, id: strin
     fail(`Could not find import ${exportForImport.fromName} in main module ${mainModulePath}`);
   }
 
-  const resolvedModulePath = resolveSync(fs, mainImportFromExport.modulePath, mainModulePath, forceFlat);
+  const resolvedModulePath = remapCache.moduleResolveCache.getOrThunk(
+    mainImportFromExport.modulePath + '-' + mainModulePath,
+    () => resolveSync(fs, mainImportFromExport.modulePath, mainModulePath, forceFlat)
+  );
 
   return createImport(mainImportFromExport.kind, imp.name, mainImportFromExport.fromName, resolvedModulePath);
 };
 
-const remapImports = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, imports: ImportInfo[], forceFlat: boolean): ImportInfo[] => {
+const remapImports = (fs: FileSystem, remapCache: RemapCache, id: string, imports: ImportInfo[], forceFlat: boolean): ImportInfo[] => {
   return imports.map((imp) => {
-    return isRemapTargetImport(imp.modulePath) && imp.kind !== ImportInfoKind.SideEffect ? remapImport(fs, mainModuleCache, id, imp, forceFlat) : imp;
+    return isRemapTargetImport(imp.modulePath) && imp.kind !== ImportInfoKind.SideEffect ? remapImport(fs, remapCache, id, imp, forceFlat) : imp;
   });
 };
 
-const remap = (fs: FileSystem, mainModuleCache: MainModuleCache, id: string, node: estree.Program, forceFlat: boolean): void => {
+const remap = (fs: FileSystem, remapCache: RemapCache, id: string, node: estree.Program, forceFlat: boolean): void => {
   const imports = readImports(node);
   const body = node.body.filter((n) => !isImport(n));
-  const remappedImports = remapImports(fs, mainModuleCache as ObjectCache<MainModuleInfo>, id, imports, forceFlat);
+  const remappedImports = remapImports(fs, remapCache, id, imports, forceFlat);
   node.body = [].concat(toAst(remappedImports)).concat(body);
 };
 
