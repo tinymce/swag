@@ -4,17 +4,27 @@ import { remap } from '../ast/Remap';
 import { FileSystem } from '../fs/FileSystem';
 import { getFileSystem } from '../fs/CachedFileSystem';
 import { createRemapCache, RemapCache } from '../ast/RemapCache';
+import { extname } from 'path';
 
 interface Options {
   fileSystem?: FileSystem;
   forceFlat: boolean;
 }
 
+interface RollupResult {
+  code: string;
+  map: {
+    version: number;
+    sources: string[];
+    mappings: string;
+  };
+}
+
 const defaultOptions = {
   forceFlat: true
 };
 
-const transform = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean) => (code: string, id: string): any => {
+const transformJs = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean, code: string, id: string) => {
   const program = parse(code);
 
   remap(fs, remapCache, id, program, forceFlat);
@@ -25,6 +35,10 @@ const transform = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean) =
     code: newCode,
     map: { version: 3, sources: [], mappings: '' }
   };
+};
+
+const transform = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean) => (code: string, id: string): RollupResult | string => {
+  return extname(id) === '.js' ? transformJs(fs, remapCache, forceFlat, code, id) : code;
 };
 
 const remapImports = (options: Options = defaultOptions) => {
