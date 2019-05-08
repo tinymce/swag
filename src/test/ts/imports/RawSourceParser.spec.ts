@@ -89,6 +89,38 @@ describe('RawSourceParser', () => {
     ]);
   });
 
+  it('should parse import formats with no semicolons', () => {
+    const importFormatsDoubleQuotes = [
+      'import {',
+      '  Component',
+      '} from \'@something/something\'',
+      'import defaultMember from \'module-name\'',
+      'import   *    as name from \'module-name  \'',
+      'import   {',
+      'member',
+      '}   from \'  module-name\'',
+      'import { member as alias } from \'module-name\'',
+      'import { member1 , member2 } from \'module-name\'',
+      'import { member1 , member2 as alias2 , member3 as alias3 } from \'module-name\'',
+      'import defaultMember, { member, member } from \'module-name\'',
+      'import defaultMember, * as name from \'module-name\'',
+      'import \'module-name\'',
+    ].join('\n');
+
+    expect(parseImports(importFormatsDoubleQuotes)).to.deep.equal([
+      { start: 0, end: 50, text: 'import {\n  Component\n} from \'@something/something\'' },
+      { start: 51, end: 90, text: 'import defaultMember from \'module-name\'' },
+      { start: 91, end: 133, text: 'import   *    as name from \'module-name  \'' },
+      { start: 134, end: 176, text: 'import   {\nmember\n}   from \'  module-name\'' },
+      { start: 177, end: 222, text: 'import { member as alias } from \'module-name\'' },
+      { start: 223, end: 270, text: 'import { member1 , member2 } from \'module-name\'' },
+      { start: 271, end: 348, text: 'import { member1 , member2 as alias2 , member3 as alias3 } from \'module-name\'' },
+      { start: 349, end: 408, text: 'import defaultMember, { member, member } from \'module-name\'' },
+      { start: 409, end: 459, text: 'import defaultMember, * as name from \'module-name\'' },
+      { start: 460, end: 480, text: 'import \'module-name\'' }
+    ]);
+  });
+
   it('should should not parse imports in comments', () => {
     const importFormatsDoubleQuotes = [
       '/*',
