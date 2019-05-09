@@ -22,7 +22,7 @@ export const parseComments = (code: string): RawToken[] => {
 };
 
 const parseImportStringLiterals = (code: string): RawToken[] => {
-  const regex = /\'[^'\r\n;]*import[^'\r\n]*\'|\"[^"\r\n]*import[^"\r\n]*\"/g;
+  const regex = /\'[^'\r\n;]*import[^'\r\n]*\'|\"[^"\r\n;]*import[^"\r\n]*\"/g;
   return tokenize(regex, code);
 };
 
