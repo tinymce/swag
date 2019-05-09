@@ -22,12 +22,12 @@ export const parseComments = (code: string): RawToken[] => {
 };
 
 const parseImportStringLiterals = (code: string): RawToken[] => {
-  const regex = /\'[^'\r\n]*import[^'\r\n]*\'|\"[^"\r\n]*import[^"\r\n]*\"/g;
+  const regex = /\'[^'\r\n;]*import[^'\r\n]*\'|\"[^"\r\n]*import[^"\r\n]*\"/g;
   return tokenize(regex, code);
 };
 
 export const parseImports = (code: string): RawToken[] => {
-  const regex = /import(?:["'\s]*([\w*{}\n\r\t, ]+)from\s*)?["'\s].*([@\w/_-]+)["'\s].*;?/g;
+  const regex = /import(?:\s*([\w*{}\n\r\t, ]+)from)?\s*["']\s*([@\w./_-]+)\s*["'](?:\s*;)?/g;
   const comments = parseComments(code);
   const importStringLiterals = parseImportStringLiterals(code);
   const notContainsIn = (tokens) => (imp) => tokens.findIndex((token) => imp.start > token.start && imp.start < token.end) === -1;
