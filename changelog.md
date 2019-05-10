@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [4.1.4] - 2019-05-09
+
+### Fixed
+- Fixed the webpack remapper picking up function names that contained the word `import` as imports.
+
 # [4.1.3] - 2019-05-07
 
 ### Fixed
