@@ -8,7 +8,7 @@ export interface File {
 const findFileByPath = (files: File[], filePath: string) => files.find((file) => file.filePath === filePath);
 
 const createFile = (filePath: string, data?: string): File => {
-  return { filePath, data: new Buffer(data ? data : '', 'utf-8') };
+  return { filePath, data: Buffer.from(data ? data : '', 'utf-8') };
 };
 
 const createJsonFile = (filePath: string, data: any): File => {
