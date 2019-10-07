@@ -66,14 +66,14 @@ Dependency:
 
 Dependency: 
   name: @types/node
-  version: 8.10.43
-  repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+  version: 11.10.5
+  repository: (none)
   licenses: MIT
 
 Dependency: 
   name: @types/node
-  version: 11.10.5
-  repository: (none)
+  version: 12.7.11
+  repository: https://github.com/DefinitelyTyped/DefinitelyTyped
   licenses: MIT
 
 Dependency: 

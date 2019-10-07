@@ -110,7 +110,7 @@ export const task = (grunt) => {
             grunt.file.write(file.dest, output.code);
           }
         } else {
-          grunt.file.write(file.dest, output.code);
+          grunt.file.write(file.dest, output.source);
         }
       }
 

@@ -27,7 +27,7 @@
   "dependencies": {
     "@types/escodegen": "0.0.6",
     "@types/estree": "0.0.39",
-    "@types/node": "^8.10.39",
+    "@types/node": "^12.7.11",
     "acorn": "^7.1.0",
     "escodegen": "^1.12.0",
     "magic-string": "^0.25.4",
