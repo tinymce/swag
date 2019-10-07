@@ -9,7 +9,7 @@ export interface MainModuleInfo {
 }
 
 const validate = (program: estree.Program): boolean => {
-  return program.body.reduce((acc, node) => {
+  return program.body.reduce((acc: boolean, node) => {
     const validType = node.type === 'ImportDeclaration' || node.type === 'ExportNamedDeclaration';
     return acc === false ? false : validType;
   }, true);
