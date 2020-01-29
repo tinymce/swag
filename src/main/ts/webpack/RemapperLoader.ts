@@ -1,7 +1,7 @@
-import { ReplaceSource, OriginalSource, SourceMapSource } from 'webpack-sources';
-import { createRemapper, remapImportsInSource } from '../imports/Remapper';
 import * as path from 'path';
+import { OriginalSource, ReplaceSource, SourceMapSource } from 'webpack-sources';
 import { RawToken } from '../imports/RawSourceParser';
+import { createRemapper, remapImportsInSource } from '../imports/Remapper';
 
 let remapper = createRemapper();
 let hasInjectedCacheDropHook = false;
@@ -33,7 +33,7 @@ const remapSource = (loaderContext, source: string, map) => {
 };
 
 // Checks for `import ... from '@ephox/` or `import ... from "@ephox/` we don't need to process modules that doesn't contain these
-const seemToContainEphoxImports = (code: string) => /\'@ephox\/|\"@ephox\//.test(code);
+const seemToContainEphoxImports = (code: string) => /[\'\"]@(ephox|tinymce)\//.test(code);
 
 // We need to generate a new remapper after a bundle is created to drop the caches it has while it's remapping
 // This injects that cache drop directly into the webpack compiler the _compiler is documented as hacky but

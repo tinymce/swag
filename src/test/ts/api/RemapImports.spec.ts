@@ -22,6 +22,24 @@ const mockFiles = [
       each
     }
   `),
+  createJsonFile('/project/node_modules/@tinymce/miniature/package.json', {
+    name: '@tinymce/miniature',
+    main: './Main.js'
+  }),
+  createFile('/project/node_modules/@tinymce/miniature/Main.js', `
+    import TinyVer from './TinyVer';
+
+    export {
+      TinyVer
+    }
+  `),
+  createFile('/project/node_modules/@tinymce/miniature/TinyVer.js', `
+    let getVersion = () => {};
+
+    export {
+      getVersion
+    }
+  `),
   createFile('/project/node_modules/@ephox/katamari/TestCss.css', `.class { color: red; }`),
 ];
 
@@ -29,10 +47,21 @@ describe('RemapImports', () => {
   it('should remap target js file imports', () => {
     const mockFs = getFileSystem(mockFiles);
     const inputSource = `import { Arr } from '@ephox/katamari'`;
+    const inputSource2 = `import { TinyVer } from '@tinymce/miniature'`;
 
     const remapResult = remapImports({ fileSystem: mockFs, forceFlat: true }).transform(inputSource, '/project/Test.js');
+    const remapResult2 = remapImports({ fileSystem: mockFs, forceFlat: true }).transform(inputSource2, '/project/Test2.js');
+
     expect(remapResult).to.deep.equal({
       code: `import Arr from '/project/node_modules/@ephox/katamari/Arr.js';`,
+      map: {
+        mappings: '',
+        sources: [],
+        version: 3
+      }
+    });
+    expect(remapResult2).to.deep.equal({
+      code: `import TinyVer from '/project/node_modules/@tinymce/miniature/TinyVer.js';`,
       map: {
         mappings: '',
         sources: [],

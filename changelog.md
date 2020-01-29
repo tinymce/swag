@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [4.2.0] - 2020-01-28
+
+### Added
+- Added support for remapping modules in the `@tinymce` scope.
+
 # [4.1.5] - 2019-10-03
 
 ### Security

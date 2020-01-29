@@ -1,16 +1,16 @@
 import * as estree from 'estree';
-import { readImports, toAst, createImport, ImportInfo, ImportInfoKind } from './Imports';
-import { resolveSync } from '../fs/Resolve';
 import { FileSystem } from '../fs/FileSystem';
-import { readMainModule } from '../ast/MainModule';
-import { parse } from '../ast/Parser';
+import { resolveSync } from '../fs/Resolve';
 import { fail } from '../utils/Fail';
+import { createImport, ImportInfo, ImportInfoKind, readImports, toAst } from './Imports';
+import { readMainModule } from './MainModule';
+import { parse } from './Parser';
 import { RemapCache } from './RemapCache';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
-const isWrapModuleImport = (path: string) => /^@ephox\/wrap\-[^\/]*/.test(path);
-const isGlobalsModuleImport = (path: string) => /^@ephox\/[^\-]+\-globals$/.test(path);
-const isEphoxModuleImport = (path: string) => /^@ephox\/[^\/]*$/.test(path);
+const isWrapModuleImport = (path: string) => /^@(ephox|tinymce)\/wrap\-[^\/]*/.test(path);
+const isGlobalsModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\-]+\-globals$/.test(path);
+const isEphoxModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\/]*$/.test(path);
 const isRemapTargetImport = (path: string) => isEphoxModuleImport(path) && !isGlobalsModuleImport(path) && !isWrapModuleImport(path);
 
 const findRootName = (modulePath: string) => {
