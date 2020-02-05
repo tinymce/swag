@@ -1,3 +1,5 @@
+test only
+
 This project contains various rollup plugins that is useful when dealing with es6 modules, as well as a grunt rollup task.
 
 ### swag.nodeResolve
