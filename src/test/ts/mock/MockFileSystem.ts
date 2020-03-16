@@ -7,6 +7,12 @@ export interface File {
 
 const findFileByPath = (files: File[], filePath: string) => files.find((file) => file.filePath === filePath);
 
+const isDirInFiles = (files: File[], dirPath: string) => files.some((file) => {
+  const dirs = file.filePath.split('/');
+  const fileDirPath = dirs.slice(0, -1).join('/');
+  return fileDirPath.indexOf(dirPath) !== -1;
+});
+
 const createFile = (filePath: string, data?: string): File => {
   return { filePath, data: Buffer.from(data ? data : '', 'utf-8') };
 };
@@ -40,12 +46,23 @@ const getFileSystem = (files: File[]): FileSystem => {
     return filePath;
   };
 
+  const isDirectory = (dirPath: string, callback: (err: any, state?: boolean) => any): void => {
+    const exists = isDirInFiles(files, dirPath);
+    callback(null, exists);
+  };
+
+  const isDirectorySync = (dirPath: string): boolean => {
+    return isDirInFiles(files, dirPath);
+  };
+
   return {
     isFile,
     readFile,
     isFileSync,
     readFileSync,
-    realpathSync
+    realpathSync,
+    isDirectory,
+    isDirectorySync
   };
 };
 

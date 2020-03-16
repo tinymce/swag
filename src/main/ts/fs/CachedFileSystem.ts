@@ -89,12 +89,53 @@ const getFileSystem = (): FileSystem => {
     return filePath;
   };
 
+  const isDirectory = (dirPath: string, cb: (err: any, state?: boolean) => any): void => {
+    const cacheItem = statCache[dirPath];
+
+    if (typeof cacheItem !== 'undefined') {
+      return cb(null, cacheItem);
+    }
+
+    fs.stat(dirPath, function (err, stat) {
+      if (!err) {
+        const exists = stat.isDirectory();
+        statCache[dirPath] = exists;
+        return cb(null, exists);
+      }
+      if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
+        statCache[dirPath] = false;
+        return cb(null, false);
+      }
+      return cb(err);
+    });
+  };
+
+  const isDirectorySync = (dirPath: string): boolean => {
+    const cacheItem = statCache[dirPath];
+
+    if (typeof cacheItem !== 'undefined') {
+      return cacheItem;
+    }
+
+    try {
+      const stat = fs.statSync(dirPath);
+      const exists = stat.isDirectory();
+      statCache[dirPath] = exists;
+      return exists;
+    } catch (e) {
+      if (e && (e.code === 'ENOENT' || e.code === 'ENOTDIR')) { return false; }
+      throw e;
+    }
+  };
+
   return {
     isFile,
     readFile,
     isFileSync,
     readFileSync,
-    realpathSync
+    realpathSync,
+    isDirectory,
+    isDirectorySync
   };
 };
 
