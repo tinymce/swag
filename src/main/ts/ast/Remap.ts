@@ -2,6 +2,7 @@ import * as estree from 'estree';
 import { FileSystem } from '../fs/FileSystem';
 import { resolveSync } from '../fs/Resolve';
 import { fail } from '../utils/Fail';
+import { ExportInfoKind } from './Exports';
 import { createImport, ImportInfo, ImportInfoKind, readImports, toAst } from './Imports';
 import { readMainModule } from './MainModule';
 import { parse } from './Parser';
@@ -35,8 +36,13 @@ const remapImport = (fs: FileSystem, remapCache: RemapCache, id: string, imp: Im
     fail(`Could not find export ${imp.fromName} in main module ${mainModulePath}`);
   }
 
+  // If the export is a variable declaration then we can't remap it
+  if (exportForImport.kind === ExportInfoKind.Variable) {
+    return imp;
+  }
+
   const mainImportFromExport = mainModule.imports.find((mi) => mi.name === exportForImport.fromName);
-  if (!exportForImport) {
+  if (!mainImportFromExport) {
     fail(`Could not find import ${exportForImport.fromName} in main module ${mainModulePath}`);
   }
 

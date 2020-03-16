@@ -51,7 +51,15 @@ const mockFiles = [
     import FormData from './FormData';
     export { FormData }
   `),
-  createFile('/project/node_modules/@ephox/something/Module.js', '')
+  createFile('/project/node_modules/@ephox/something/Module.js', ''),
+
+  createJsonFile('/project/node_modules/@tinymce/oxide-icons-default/package.json', {
+    name: '@tinymce/oxide-icons-default',
+    main: 'dist/js/icons.js'
+  }),
+  createFile('/project/node_modules/@tinymce/oxide-icons-default/dist/js/icons.js', `
+    export var getAll = function () { };
+  `)
 ];
 
 describe('Remap', () => {
@@ -59,7 +67,7 @@ describe('Remap', () => {
     const mockFs = getFileSystem(mockFiles);
 
     const program = parse(`
-      import { Fun, Arr, Arr2, noop } from '@ephox/katamari'
+      import { Fun, Arr, Arr2, noop } from '@ephox/katamari';
     `);
 
     remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
@@ -124,6 +132,20 @@ describe('Remap', () => {
     expect(serialize(program)).to.equal([
       `import 'something';`,
       `import '@ephox/katamari';`
+    ].join('\n'));
+  });
+
+  it('should passthrough variable declaration imports', () => {
+    const mockFs = getFileSystem(mockFiles);
+
+    const program = parse(`
+      import { getAll as getAllOxide } from '@tinymce/oxide-icons-default';
+    `);
+
+    remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
+
+    expect(serialize(program)).to.equal([
+      `import { getAll as getAllOxide } from '@tinymce/oxide-icons-default';`
     ].join('\n'));
   });
 });

@@ -1,12 +1,13 @@
-import { readMainModule } from '../../../main/ts/ast/MainModule';
-import { parse } from '../../../main/ts/ast/Parser';
 import { expect } from 'chai';
 import 'mocha';
+import { ExportInfoKind } from '../../../main/ts/ast/Exports';
 import { ImportInfoKind } from '../../../main/ts/ast/Imports';
+import { readMainModule } from '../../../main/ts/ast/MainModule';
+import { parse } from '../../../main/ts/ast/Parser';
 
 describe('MainModule', () => {
   it('readMainModule should read the various imports/exports formats correctly', () => {
-    const mainModule = readMainModule(parse(`
+    const mainModule1 = readMainModule(parse(`
       import * as A from './ModuleA';
 
       export {
@@ -14,7 +15,7 @@ describe('MainModule', () => {
       }
     `));
 
-    expect(mainModule.imports).to.eql([
+    expect(mainModule1.imports).to.eql([
       {
         kind: ImportInfoKind.Namespace,
         fromName: 'A',
@@ -23,10 +24,25 @@ describe('MainModule', () => {
       }
     ]);
 
-    expect(mainModule.exports).to.eql([
+    expect(mainModule1.exports).to.eql([
       {
         fromName: 'A',
-        name: 'A'
+        name: 'A',
+        kind: ExportInfoKind.Specified
+      }
+    ]);
+
+    const mainModule2 = readMainModule(parse(`
+      export var A = 'A';
+    `));
+
+    expect(mainModule2.imports).to.eql([ ]);
+
+    expect(mainModule2.exports).to.eql([
+      {
+        fromName: 'A',
+        name: 'A',
+        kind: ExportInfoKind.Variable
       }
     ]);
   });
