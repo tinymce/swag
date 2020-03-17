@@ -36,7 +36,7 @@ const remapImport = (fs: FileSystem, remapCache: RemapCache, id: string, imp: Im
     fail(`Could not find export ${imp.fromName} in main module ${mainModulePath}`);
   }
 
-  // If the export is a variable declaration then we can't remap it
+  // If the export is a variable declaration then we should't remap it
   if (exportForImport.kind === ExportInfoKind.Variable) {
     return imp;
   }
