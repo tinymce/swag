@@ -10,9 +10,10 @@ import { RemapCache } from './RemapCache';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
 const isWrapModuleImport = (path: string) => /^@(ephox|tinymce)\/wrap\-[^\/]*/.test(path);
+const isOxideModuleImport = (path: string) => /^@(ephox|tinymce)\/oxide[^\/]*/.test(path);
 const isGlobalsModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\-]+\-globals$/.test(path);
 const isEphoxModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\/]*$/.test(path);
-const isRemapTargetImport = (path: string) => isEphoxModuleImport(path) && !isGlobalsModuleImport(path) && !isWrapModuleImport(path);
+const isRemapTargetImport = (path: string) => isEphoxModuleImport(path) && !isGlobalsModuleImport(path) && !isWrapModuleImport(path) && !isOxideModuleImport(path);
 
 const findRootName = (modulePath: string) => {
   const parts = modulePath.split('/');
@@ -36,9 +37,13 @@ const remapImport = (fs: FileSystem, remapCache: RemapCache, id: string, imp: Im
     fail(`Could not find export ${imp.fromName} in main module ${mainModulePath}`);
   }
 
-  // If the export is a variable declaration then we should't remap it
+  // If the export is a variable declaration then we can't remap it so fail
   if (exportForImport.kind === ExportInfoKind.Variable) {
-    return imp;
+    fail([
+      'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly impede any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
+      '  exported variable: ' + exportForImport.name,
+      '  main module: ' + mainModulePath
+    ].join('\n'));
   }
 
   const mainImportFromExport = mainModule.imports.find((mi) => mi.name === exportForImport.fromName);

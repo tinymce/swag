@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fixed not working with the latest version of `resolve`.
-- Fixed remapping throwing an exception if a main module contained an exported variable.
+- Fixed the error message when throwing an exception if a main module contained an exported local variable.
+- Fixed oxide libraries incorrectly being remapped.
 
 # [4.2.0] - 2020-01-28
 

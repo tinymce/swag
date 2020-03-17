@@ -53,23 +53,12 @@ const mockFiles = [
   `),
   createFile('/project/node_modules/@ephox/something/Module.js', ''),
 
-  createJsonFile('/project/node_modules/@tinymce/oxide-icons-default/package.json', {
-    name: '@tinymce/oxide-icons-default',
+  createJsonFile('/project/node_modules/@tinymce/something/package.json', {
+    name: '@tinymce/something',
     main: 'dist/js/icons.js'
   }),
-  createFile('/project/node_modules/@tinymce/oxide-icons-default/dist/js/icons.js', `
-    import { getOne } from './one';
-  
+  createFile('/project/node_modules/@tinymce/something/dist/js/icons.js', `
     export let getAll = () => {};
-    
-    export {
-      getOne
-    }
-  `),
-  createFile('/project/node_modules/@tinymce/oxide-icons-default/dist/js/one.js', `  
-    export let getOne = () => {};
-    
-    export { getOne }
   `)
 ];
 
@@ -146,18 +135,23 @@ describe('Remap', () => {
     ].join('\n'));
   });
 
-  it('should passthrough variable declaration imports, but remap specified imports', () => {
+  it('should fail if a variable declaration export is used in the main module', () => {
     const mockFs = getFileSystem(mockFiles);
 
     const program = parse(`
-      import { getOne, getAll as getAllOxide } from '@tinymce/oxide-icons-default';
+      import { getAll as getAllOxide } from '@tinymce/something';
     `);
 
-    remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
+    try {
+      remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
 
-    expect(serialize(program)).to.equal([
-      `import { getOne } from '/project/node_modules/@tinymce/oxide-icons-default/dist/js/one.js';`,
-      `import { getAll as getAllOxide } from '@tinymce/oxide-icons-default';`
-    ].join('\n'));
+      fail('Should never get here');
+    } catch (e) {
+      expect(e.message).to.equal([
+        'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly impede any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
+        '  exported variable: getAll',
+        '  main module: /project/node_modules/@tinymce/something/dist/js/icons.js'
+      ].join('\n'));
+    }
   });
 });
