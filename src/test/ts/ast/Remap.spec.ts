@@ -58,7 +58,18 @@ const mockFiles = [
     main: 'dist/js/icons.js'
   }),
   createFile('/project/node_modules/@tinymce/oxide-icons-default/dist/js/icons.js', `
-    export var getAll = function () { };
+    import { getOne } from './one';
+  
+    export let getAll = () => {};
+    
+    export {
+      getOne
+    }
+  `),
+  createFile('/project/node_modules/@tinymce/oxide-icons-default/dist/js/one.js', `  
+    export let getOne = () => {};
+    
+    export { getOne }
   `)
 ];
 
@@ -135,16 +146,17 @@ describe('Remap', () => {
     ].join('\n'));
   });
 
-  it('should passthrough variable declaration imports', () => {
+  it('should passthrough variable declaration imports, but remap specified imports', () => {
     const mockFs = getFileSystem(mockFiles);
 
     const program = parse(`
-      import { getAll as getAllOxide } from '@tinymce/oxide-icons-default';
+      import { getOne, getAll as getAllOxide } from '@tinymce/oxide-icons-default';
     `);
 
     remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
 
     expect(serialize(program)).to.equal([
+      `import { getOne } from '/project/node_modules/@tinymce/oxide-icons-default/dist/js/one.js';`,
       `import { getAll as getAllOxide } from '@tinymce/oxide-icons-default';`
     ].join('\n'));
   });
