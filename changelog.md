@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [4.2.1] - 2020-03-18
+
+### Fixed
+- Fixed not working with the latest version of `resolve`.
+- Fixed the error message when throwing an exception if a main module contained an exported local variable.
+- Fixed oxide libraries incorrectly being remapped.
+
 # [4.2.0] - 2020-01-28
 
 ### Added

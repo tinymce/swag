@@ -13,6 +13,7 @@ const resolveSync = (fs: FileSystem, importee: string, importer: string, forceFl
       basedir: path.dirname(importer),
       isFile: fs.isFileSync,
       readFileSync: fs.readFileSync,
+      isDirectory: fs.isDirectorySync,
       preserveSymlinks: false
     }
   );
@@ -55,6 +56,7 @@ const resolveUsingNode = (fs: FileSystem, importee: string, importer: string, fo
         },
         isFile: fs.isFile,
         readFile: fs.readFile,
+        isDirectory: fs.isDirectory,
         preserveSymlinks: false
       }, (err, resolved) => {
         if (err) {

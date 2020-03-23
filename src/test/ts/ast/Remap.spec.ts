@@ -51,7 +51,15 @@ const mockFiles = [
     import FormData from './FormData';
     export { FormData }
   `),
-  createFile('/project/node_modules/@ephox/something/Module.js', '')
+  createFile('/project/node_modules/@ephox/something/Module.js', ''),
+
+  createJsonFile('/project/node_modules/@tinymce/something/package.json', {
+    name: '@tinymce/something',
+    main: 'dist/js/icons.js'
+  }),
+  createFile('/project/node_modules/@tinymce/something/dist/js/icons.js', `
+    export let getAll = () => {};
+  `)
 ];
 
 describe('Remap', () => {
@@ -59,7 +67,7 @@ describe('Remap', () => {
     const mockFs = getFileSystem(mockFiles);
 
     const program = parse(`
-      import { Fun, Arr, Arr2, noop } from '@ephox/katamari'
+      import { Fun, Arr, Arr2, noop } from '@ephox/katamari';
     `);
 
     remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
@@ -125,5 +133,25 @@ describe('Remap', () => {
       `import 'something';`,
       `import '@ephox/katamari';`
     ].join('\n'));
+  });
+
+  it('should fail if a variable declaration export is used in the main module', () => {
+    const mockFs = getFileSystem(mockFiles);
+
+    const program = parse(`
+      import { getAll as getAllOxide } from '@tinymce/something';
+    `);
+
+    try {
+      remap(mockFs, createRemapCache(), '/project/src/main/ts/Module.js', program, true);
+
+      fail('Should never get here');
+    } catch (e) {
+      expect(e.message).to.equal([
+        'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly impede any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
+        '  exported variable: getAll',
+        '  main module: /project/node_modules/@tinymce/something/dist/js/icons.js'
+      ].join('\n'));
+    }
   });
 });
