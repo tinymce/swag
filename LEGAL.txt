@@ -1,24 +1,30 @@
 Dependency: 
   name: @babel/code-frame
-  version: 7.5.5
+  version: 7.8.3
   repository: https://github.com/babel/babel/tree/master/packages/babel-code-frame
   licenses: MIT
 
 Dependency: 
+  name: @babel/helper-validator-identifier
+  version: 7.9.0
+  repository: https://github.com/babel/babel/tree/master/packages/babel-helper-validator-identifier
+  licenses: MIT
+
+Dependency: 
   name: @babel/highlight
-  version: 7.5.0
+  version: 7.9.0
   repository: https://github.com/babel/babel/tree/master/packages/babel-highlight
   licenses: MIT
 
 Dependency: 
   name: @ephox/swag
-  version: 4.1.5
+  version: 4.2.1
   repository: https://github.com/ephox/swag
   licenses: Apache-2.0
 
 Dependency: 
   name: @ephox/tslint-rules
-  version: 1.0.11
+  version: 1.1.1
   repository: (none)
   licenses: Apache-2.0
 
@@ -30,7 +36,7 @@ Dependency:
 
 Dependency: 
   name: @types/chai
-  version: 4.2.3
+  version: 4.2.11
   repository: https://github.com/DefinitelyTyped/DefinitelyTyped
   licenses: MIT
 
@@ -53,6 +59,12 @@ Dependency:
   licenses: MIT
 
 Dependency: 
+  name: @types/estree
+  version: 0.0.44
+  repository: (none)
+  licenses: MIT
+
+Dependency: 
   name: @types/grunt
   version: 0.4.25
   repository: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -66,19 +78,19 @@ Dependency:
 
 Dependency: 
   name: @types/node
-  version: 11.10.5
-  repository: (none)
-  licenses: MIT
-
-Dependency: 
-  name: @types/node
-  version: 12.7.11
+  version: 12.12.34
   repository: https://github.com/DefinitelyTyped/DefinitelyTyped
   licenses: MIT
 
 Dependency: 
+  name: @types/node
+  version: 13.11.0
+  repository: (none)
+  licenses: MIT
+
+Dependency: 
   name: acorn
-  version: 7.1.0
+  version: 7.1.1
   repository: https://github.com/acornjs/acorn
   licenses: MIT
 
@@ -126,7 +138,7 @@ Dependency:
 
 Dependency: 
   name: arg
-  version: 4.1.1
+  version: 4.1.3
   repository: zeit/arg
   licenses: MIT
 
@@ -222,7 +234,7 @@ Dependency:
 
 Dependency: 
   name: chokidar
-  version: 3.2.1
+  version: 3.3.1
   repository: https://github.com/paulmillr/chokidar
   licenses: MIT
 
@@ -257,6 +269,12 @@ Dependency:
   licenses: MIT
 
 Dependency: 
+  name: commander
+  version: 2.20.3
+  repository: (none)
+  licenses: MIT
+
+Dependency: 
   name: compare-versions
   version: 3.4.0
   repository: https://github.com/omichelsen/compare-versions
@@ -270,14 +288,8 @@ Dependency:
 
 Dependency: 
   name: debug
-  version: 3.1.0
-  repository: http://github.com/visionmedia/debug
-  licenses: MIT
-
-Dependency: 
-  name: debug
   version: 3.2.6
-  repository: (none)
+  repository: http://github.com/visionmedia/debug
   licenses: MIT
 
 Dependency: 
@@ -312,7 +324,7 @@ Dependency:
 
 Dependency: 
   name: diff
-  version: 4.0.1
+  version: 4.0.2
   repository: http://github.com/kpdecker/jsdiff
   licenses: BSD-3-Clause
 
@@ -324,13 +336,13 @@ Dependency:
 
 Dependency: 
   name: es-abstract
-  version: 1.15.0
+  version: 1.17.5
   repository: http://github.com/ljharb/es-abstract
   licenses: MIT
 
 Dependency: 
   name: es-to-primitive
-  version: 1.2.0
+  version: 1.2.1
   repository: http://github.com/ljharb/es-to-primitive
   licenses: MIT
 
@@ -342,33 +354,27 @@ Dependency:
 
 Dependency: 
   name: escodegen
-  version: 1.12.0
+  version: 1.14.1
   repository: http://github.com/estools/escodegen
   licenses: BSD-2-Clause
 
 Dependency: 
   name: esprima
-  version: 3.1.3
+  version: 4.0.1
   repository: https://github.com/jquery/esprima
   licenses: BSD-2-Clause
 
 Dependency: 
-  name: esprima
-  version: 4.0.1
-  repository: (none)
-  licenses: BSD-2-Clause
-
-Dependency: 
   name: estraverse
-  version: 4.2.0
+  version: 4.3.0
   repository: http://github.com/estools/estraverse
   licenses: BSD-2-Clause
 
 Dependency: 
   name: esutils
-  version: 2.0.2
+  version: 2.0.3
   repository: http://github.com/estools/esutils
-  licenses: BSD, BSD
+  licenses: BSD-2-Clause
 
 Dependency: 
   name: fast-levenshtein
@@ -407,6 +413,12 @@ Dependency:
   licenses: ISC
 
 Dependency: 
+  name: fsevents
+  version: 2.1.2
+  repository: https://github.com/fsevents/fsevents
+  licenses: MIT
+
+Dependency: 
   name: function-bind
   version: 1.1.1
   repository: http://github.com/Raynos/function-bind
@@ -426,13 +438,13 @@ Dependency:
 
 Dependency: 
   name: glob
-  version: 7.1.2
+  version: 7.1.3
   repository: (none)
   licenses: ISC
 
 Dependency: 
   name: glob
-  version: 7.1.3
+  version: 7.1.6
   repository: http://github.com/isaacs/node-glob
   licenses: ISC
 
@@ -444,7 +456,7 @@ Dependency:
 
 Dependency: 
   name: glob-parent
-  version: 5.1.0
+  version: 5.1.1
   repository: gulpjs/glob-parent
   licenses: ISC
 
@@ -468,7 +480,7 @@ Dependency:
 
 Dependency: 
   name: has-symbols
-  version: 1.0.0
+  version: 1.0.1
   repository: http://github.com/ljharb/has-symbols
   licenses: MIT
 
@@ -480,7 +492,7 @@ Dependency:
 
 Dependency: 
   name: hosted-git-info
-  version: 2.7.1
+  version: 2.8.8
   repository: https://github.com/npm/hosted-git-info
   licenses: ISC
 
@@ -492,7 +504,7 @@ Dependency:
 
 Dependency: 
   name: inherits
-  version: 2.0.3
+  version: 2.0.4
   repository: http://github.com/isaacs/inherits
   licenses: ISC
 
@@ -510,13 +522,13 @@ Dependency:
 
 Dependency: 
   name: is-callable
-  version: 1.1.4
+  version: 1.1.5
   repository: http://github.com/ljharb/is-callable
   licenses: MIT
 
 Dependency: 
   name: is-date-object
-  version: 1.0.1
+  version: 1.0.2
   repository: http://github.com/ljharb/is-date-object
   licenses: MIT
 
@@ -546,14 +558,14 @@ Dependency:
 
 Dependency: 
   name: is-regex
-  version: 1.0.4
+  version: 1.0.5
   repository: http://github.com/ljharb/is-regex
   licenses: MIT
 
 Dependency: 
   name: is-symbol
-  version: 1.0.2
-  repository: http://github.com/ljharb/is-symbol
+  version: 1.0.3
+  repository: http://github.com/inspect-js/is-symbol
   licenses: MIT
 
 Dependency: 
@@ -654,13 +666,13 @@ Dependency:
 
 Dependency: 
   name: magic-string
-  version: 0.25.4
+  version: 0.25.7
   repository: https://github.com/rich-harris/magic-string
   licenses: MIT
 
 Dependency: 
   name: make-error
-  version: 1.3.0
+  version: 1.3.6
   repository: http://github.com/JsCommunity/make-error
   licenses: ISC
 
@@ -672,38 +684,38 @@ Dependency:
 
 Dependency: 
   name: minimist
-  version: 0.0.8
-  repository: http://github.com/substack/minimist
-  licenses: MIT
-
-Dependency: 
-  name: minimist
   version: 0.1.0
   repository: (none)
   licenses: MIT
 
 Dependency: 
+  name: minimist
+  version: 1.2.5
+  repository: http://github.com/substack/minimist
+  licenses: MIT
+
+Dependency: 
   name: mkdirp
-  version: 0.5.1
+  version: 0.5.4
   repository: https://github.com/substack/node-mkdirp
   licenses: MIT
 
 Dependency: 
+  name: mkdirp
+  version: 0.5.5
+  repository: (none)
+  licenses: MIT
+
+Dependency: 
   name: mocha
-  version: 6.2.1
+  version: 6.2.3
   repository: https://github.com/mochajs/mocha
   licenses: MIT
 
 Dependency: 
   name: ms
-  version: 2.0.0
-  repository: zeit/ms
-  licenses: MIT
-
-Dependency: 
-  name: ms
   version: 2.1.1
-  repository: (none)
+  repository: zeit/ms
   licenses: MIT
 
 Dependency: 
@@ -732,7 +744,7 @@ Dependency:
 
 Dependency: 
   name: object-inspect
-  version: 1.6.0
+  version: 1.7.0
   repository: http://github.com/substack/object-inspect
   licenses: MIT
 
@@ -750,8 +762,8 @@ Dependency:
 
 Dependency: 
   name: object.getownpropertydescriptors
-  version: 2.0.3
-  repository: http://github.com/ljharb/object.getownpropertydescriptors
+  version: 2.1.0
+  repository: http://github.com/es-shims/object.getownpropertydescriptors
   licenses: MIT
 
 Dependency: 
@@ -762,13 +774,13 @@ Dependency:
 
 Dependency: 
   name: optionator
-  version: 0.8.2
+  version: 0.8.3
   repository: http://github.com/gkz/optionator
   licenses: MIT
 
 Dependency: 
   name: p-limit
-  version: 2.2.1
+  version: 2.2.2
   repository: sindresorhus/p-limit
   licenses: MIT
 
@@ -810,7 +822,7 @@ Dependency:
 
 Dependency: 
   name: picomatch
-  version: 2.0.7
+  version: 2.2.2
   repository: micromatch/picomatch
   licenses: MIT
 
@@ -834,7 +846,7 @@ Dependency:
 
 Dependency: 
   name: readdirp
-  version: 3.1.3
+  version: 3.3.0
   repository: http://github.com/paulmillr/readdirp
   licenses: MIT
 
@@ -852,21 +864,15 @@ Dependency:
 
 Dependency: 
   name: resolve
-  version: 1.10.0
+  version: 1.15.1
   repository: http://github.com/browserify/resolve
   licenses: MIT
 
 Dependency: 
   name: rollup
-  version: 1.22.0
+  version: 1.32.1
   repository: rollup/rollup
   licenses: MIT
-
-Dependency: 
-  name: semver
-  version: 5.6.0
-  repository: (none)
-  licenses: ISC
 
 Dependency: 
   name: semver
@@ -924,13 +930,13 @@ Dependency:
 
 Dependency: 
   name: source-map-support
-  version: 0.5.13
+  version: 0.5.16
   repository: https://github.com/evanw/node-source-map-support
   licenses: MIT
 
 Dependency: 
   name: sourcemap-codec
-  version: 1.4.6
+  version: 1.4.8
   repository: https://github.com/Rich-Harris/sourcemap-codec
   licenses: MIT
 
@@ -953,15 +959,27 @@ Dependency:
   licenses: MIT
 
 Dependency: 
+  name: string.prototype.trimend
+  version: 1.0.0
+  repository: (none)
+  licenses: MIT
+
+Dependency: 
   name: string.prototype.trimleft
-  version: 2.1.0
+  version: 2.1.2
   repository: http://github.com/es-shims/String.prototype.trimLeft
   licenses: MIT
 
 Dependency: 
   name: string.prototype.trimright
-  version: 2.1.0
+  version: 2.1.2
   repository: http://github.com/es-shims/String.prototype.trimRight
+  licenses: MIT
+
+Dependency: 
+  name: string.prototype.trimstart
+  version: 1.0.0
+  repository: (none)
   licenses: MIT
 
 Dependency: 
@@ -1008,19 +1026,19 @@ Dependency:
 
 Dependency: 
   name: ts-node
-  version: 8.4.1
+  version: 8.8.2
   repository: http://github.com/TypeStrong/ts-node
   licenses: MIT
 
 Dependency: 
   name: tslib
-  version: 1.9.3
+  version: 1.11.1
   repository: https://github.com/Microsoft/tslib
   licenses: Apache-2.0
 
 Dependency: 
   name: tslint
-  version: 5.20.0
+  version: 5.20.1
   repository: https://github.com/palantir/tslint
   licenses: Apache-2.0
 
@@ -1044,7 +1062,7 @@ Dependency:
 
 Dependency: 
   name: typescript
-  version: 3.6.3
+  version: 3.8.3
   repository: https://github.com/Microsoft/TypeScript
   licenses: Apache-2.0
 
@@ -1079,9 +1097,9 @@ Dependency:
   licenses: ISC
 
 Dependency: 
-  name: wordwrap
-  version: 1.0.0
-  repository: http://github.com/substack/node-wordwrap
+  name: word-wrap
+  version: 1.2.3
+  repository: jonschlinkert/word-wrap
   licenses: MIT
 
 Dependency: 
@@ -1116,13 +1134,13 @@ Dependency:
 
 Dependency: 
   name: yargs
-  version: 13.3.0
+  version: 13.3.2
   repository: https://github.com/yargs/yargs
   licenses: MIT
 
 Dependency: 
   name: yargs-parser
-  version: 13.1.1
+  version: 13.1.2
   repository: git@github.com:yargs/yargs-parser
   licenses: ISC
 
