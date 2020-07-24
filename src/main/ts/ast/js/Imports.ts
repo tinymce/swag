@@ -1,5 +1,5 @@
 import * as estree from 'estree';
-import { fail } from '../utils/Fail';
+import { fail } from '../../utils/Fail';
 import { serialize } from './Serializer';
 
 export enum ImportInfoKind {
@@ -9,7 +9,7 @@ export enum ImportInfoKind {
   SideEffect
 }
 
-interface ImportInfo {
+export interface ImportInfo {
   kind: ImportInfoKind; // default, namespace, specified, sideeffect
   name: string;         // Output module name
   fromName: string;     // Input name in a specified import
@@ -160,7 +160,6 @@ const toSource = (imports: ImportInfo[]): string => {
 };
 
 export {
-  ImportInfo,
   readImports,
   createImport,
   toAst,

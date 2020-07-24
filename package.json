@@ -1,6 +1,6 @@
 {
   "name": "@ephox/swag",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "A collection of tools for rollup/webpack",
   "private": false,
   "repository": {
@@ -33,6 +33,7 @@
     "magic-string": "^0.25.4",
     "resolve": "^1.11.0",
     "rollup": "^1.22.0",
+    "rollup-plugin-dts": "^1.4.9",
     "webpack-sources": "^1.4.3"
   },
   "devDependencies": {

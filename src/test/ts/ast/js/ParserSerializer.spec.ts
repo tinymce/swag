@@ -1,5 +1,5 @@
-import { parse } from '../../../main/ts/ast/Parser';
-import { serialize } from '../../../main/ts/ast/Serializer';
+import { parse } from '../../../../main/ts/ast/js/Parser';
+import { serialize } from '../../../../main/ts/ast/js/Serializer';
 import { expect } from 'chai';
 import 'mocha';
 

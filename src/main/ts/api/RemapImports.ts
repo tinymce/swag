@@ -1,6 +1,6 @@
-import { parse } from '../ast/Parser';
-import { serialize } from '../ast/Serializer';
-import { remap } from '../ast/Remap';
+import { parse } from '../ast/js/Parser';
+import { serialize } from '../ast/js/Serializer';
+import { remap } from '../ast/js/Remap';
 import { FileSystem } from '../fs/FileSystem';
 import { getFileSystem } from '../fs/CachedFileSystem';
 import { createRemapCache, RemapCache } from '../ast/RemapCache';
