@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { ExportInfoKind, readExports } from '../../../main/ts/ast/Exports';
-import { parse } from '../../../main/ts/ast/Parser';
+import { ExportInfoKind, readExports } from '../../../../main/ts/ast/js/Exports';
+import { parse } from '../../../../main/ts/ast/js/Parser';
 
 describe('Exports', () => {
   it('readExports should read the various formats correctly', () => {

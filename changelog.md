@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [4.3.0] - 2020-07-28
+
+### Added
+- Added new d.ts bundler rollup plugin, that wraps the `rollup-plugin-dts` plugin and does additional cleanup and validation.
+
+### Changed
+- Updated the minimum rollup version to 2.0.0.
+
 # [4.2.1] - 2020-03-18
 
 ### Fixed

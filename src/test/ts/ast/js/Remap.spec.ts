@@ -1,11 +1,11 @@
-import { remap } from '../../../main/ts/ast/Remap';
-import { parse } from '../../../main/ts/ast/Parser';
-import { serialize } from '../../../main/ts/ast/Serializer';
-import { getFileSystem, createFile, createJsonFile } from '../mock/MockFileSystem';
+import { remap } from '../../../../main/ts/ast/js/Remap';
+import { parse } from '../../../../main/ts/ast/js/Parser';
+import { serialize } from '../../../../main/ts/ast/js/Serializer';
+import { getFileSystem, createFile, createJsonFile } from '../../mock/MockFileSystem';
 import { expect } from 'chai';
 import 'mocha';
 import { fail } from 'assert';
-import { createRemapCache } from '../../../main/ts/ast/RemapCache';
+import { createRemapCache } from '../../../../main/ts/ast/RemapCache';
 
 const mockFiles = [
   createJsonFile('/project/node_modules/@ephox/katamari/package.json', {

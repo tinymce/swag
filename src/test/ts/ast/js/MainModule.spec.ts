@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import 'mocha';
-import { ExportInfoKind } from '../../../main/ts/ast/Exports';
-import { ImportInfoKind } from '../../../main/ts/ast/Imports';
-import { readMainModule } from '../../../main/ts/ast/MainModule';
-import { parse } from '../../../main/ts/ast/Parser';
+import { ExportInfoKind } from '../../../../main/ts/ast/js/Exports';
+import { ImportInfoKind } from '../../../../main/ts/ast/js/Imports';
+import { readMainModule } from '../../../../main/ts/ast/js/MainModule';
+import { parse } from '../../../../main/ts/ast/js/Parser';
 
 describe('MainModule', () => {
   it('readMainModule should read the various imports/exports formats correctly', () => {

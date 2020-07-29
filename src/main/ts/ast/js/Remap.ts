@@ -1,12 +1,12 @@
 import * as estree from 'estree';
-import { FileSystem } from '../fs/FileSystem';
-import { resolveSync } from '../fs/Resolve';
-import { fail } from '../utils/Fail';
+import { FileSystem } from '../../fs/FileSystem';
+import { resolveSync } from '../../fs/Resolve';
+import { fail } from '../../utils/Fail';
 import { ExportInfoKind } from './Exports';
 import { createImport, ImportInfo, ImportInfoKind, readImports, toAst } from './Imports';
 import { readMainModule } from './MainModule';
 import { parse } from './Parser';
-import { RemapCache } from './RemapCache';
+import { RemapCache } from '../RemapCache';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
 const isWrapModuleImport = (path: string) => /^@(ephox|tinymce)\/wrap\-[^\/]*/.test(path);

@@ -1,7 +1,7 @@
-import * as Imports from './Imports';
-import * as Exports from './Exports';
 import * as estree from 'estree';
-import { fail } from '../utils/Fail';
+import { fail } from '../../utils/Fail';
+import * as Exports from './Exports';
+import * as Imports from './Imports';
 
 export interface MainModuleInfo {
   imports: Imports.ImportInfo[];

@@ -1,5 +1,5 @@
 import { ObjectCache, createObjectCache } from '../utils/ObjectCache';
-import { MainModuleInfo } from './MainModule';
+import { MainModuleInfo } from './js/MainModule';
 
 interface RemapCache {
   mainModuleCache: ObjectCache<MainModuleInfo>;

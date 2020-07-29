@@ -1,9 +1,9 @@
-import { readImports, createImport, toAst, ImportInfoKind } from '../../../main/ts/ast/Imports';
-import { parse } from '../../../main/ts/ast/Parser';
 import { expect } from 'chai';
 import 'mocha';
+import { createImport, ImportInfoKind, readImports, toAst } from '../../../../main/ts/ast/js/Imports';
+import { parse } from '../../../../main/ts/ast/js/Parser';
 
-describe('Imports', () => {
+describe('JS Imports', () => {
   it('readImports should read the various formats correctly', () => {
     const imports = readImports(parse(`
       import * as ModuleA from './ModuleA';
