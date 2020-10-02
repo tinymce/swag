@@ -80,4 +80,12 @@ describe('Resolve', () => {
     const resolvedPath = await resolver('@ephox/katamari', '/project/src/Main.js');
     expect(resolvedPath).to.equal('/prefix/project/node_modules/@ephox/katamari/Main.js');
   });
+
+  it('should not resolve rollup plugin imports', async () => {
+    const resolver = resolveId(mockFs, {}, [], false);
+
+    const resolvedPath = await resolver('/project/src/Main.js', '\0/project/src/Main.js?commonjs-proxy');
+    // tslint:disable-next-line:no-unused-expression
+    expect(resolvedPath).to.be.null;
+  });
 });

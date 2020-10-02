@@ -107,7 +107,10 @@ const runMappers = (importer: string, mappers: Mappers) => (resolvedImportee: st
 };
 
 const resolveId = (fs: FileSystem, prefixes: Prefixes, mappers: Mappers, forceFlat: boolean) => (importee: string, importer: string) => {
-  if (/\0/.test(importee) || !importer) { return null; }
+  // ignore IDs with null character, these belong to other plugins
+  if (/\0/.test(importee) || !importer || /\0/.test(importer)) {
+    return null;
+  }
 
   if (matchesPrefix(prefixes, importee)) {
     return resolvePrefix(prefixes, importee, importer);
