@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [4.3.2] - 2020-10-02
+
+### Fixed
+- Fixed incorrectly resolving imports from other rollup plugins.
+
 # [4.3.0] - 2020-07-28
 
 ### Added
