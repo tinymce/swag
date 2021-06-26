@@ -11,7 +11,7 @@
     "lib/main",
     "tasks",
     "webpack",
-    "changelog.md",
+    "CHANGELOG.md",
     "LEGAL.txt",
     "LICENSE.txt"
   ],
