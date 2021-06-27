@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Added
+- Added support for remapping `@tiny-premium` scoped packages.
+
 ### Changed
 - Upgraded dependencies.
 - Switched to eslint.
