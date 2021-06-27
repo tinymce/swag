@@ -1,13 +1,14 @@
 import { Plugin } from 'rollup';
-import rollupDts, { Options} from 'rollup-plugin-dts';
+import rollupDts, { Options } from 'rollup-plugin-dts';
 import * as ts from 'typescript';
+
 import { clean, CleanerOptions } from '../ast/ts/DtsCleaner';
 import { parse } from '../ast/ts/Parser';
 import { fail } from '../utils/Fail';
 
 interface DtsOptions extends CleanerOptions, Options {
-  clean?: boolean;
-  validate?: boolean;
+  readonly clean?: boolean;
+  readonly validate?: boolean;
 }
 
 const formatHost: ts.FormatDiagnosticsHost = {
@@ -25,7 +26,7 @@ const validate = (filename: string, code: string) => {
 
   // Check if anything failed and if so log an error
   if (diagnostics.length > 0) {
-    // tslint:disable-next-line:no-console
+    // eslint-disable-next-line no-console
     console.error(ts.formatDiagnostics(diagnostics, formatHost));
     fail('Failed to compile');
   }
@@ -42,26 +43,26 @@ const dts = (options: DtsOptions = {}): Plugin => {
   return {
     name: 'swag-dts',
     ...dtsPlugin,
-    outputOptions(outputOptions) {
+    outputOptions: (outputOptions) => {
       // Need to override the entry filename, as the plugin converts it to "name.d.d.ts"
       return dtsPlugin.outputOptions.call(dtsPlugin, {
         ...outputOptions,
         entryFileNames: outputOptions.entryFileNames || '[name].ts'
       });
     },
-    renderChunk(code, chunk) {
+    renderChunk: (code, chunk) => {
       const output = dtsPlugin.renderChunk.call(dtsPlugin, code, chunk);
       // Strip out source mapping comments
       const transformedCode = output.code.replace(/\/\/# sourceMappingURL=\w+\.d\.ts\.map/g, '');
       if (process.env.SWAG_DTS_DEBUG) {
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.debug('Transformed:\n' + transformedCode);
       }
 
       // Parse the source and clean
       const cleanedCode = options.clean === false ? transformedCode : cleanCode(chunk.fileName, transformedCode, options);
       if (process.env.SWAG_DTS_DEBUG) {
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.debug('Cleaned:\n' + transformedCode);
       }
 

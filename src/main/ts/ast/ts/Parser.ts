@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import * as ts from 'typescript';
 
 const parseConfigHost: ts.ParseConfigHost = {
@@ -7,7 +8,7 @@ const parseConfigHost: ts.ParseConfigHost = {
   readFile: ts.sys.readFile,
 };
 
-export const parse = (code: string, filename: string = 'code.ts') => {
+export const parse = (code: string, filename: string = 'code.ts'): ts.Program => {
   const configFileName = ts.findConfigFile('.', ts.sys.fileExists);
   const configResult = ts.readConfigFile(configFileName, ts.sys.readFile);
   const jsonResult = ts.parseJsonConfigFileContent(configResult.config, parseConfigHost, '.');
@@ -25,5 +26,5 @@ export const parse = (code: string, filename: string = 'code.ts') => {
   };
 
   // Create the program
-  return ts.createProgram([filename], compilerOptions, host);
+  return ts.createProgram([ filename ], compilerOptions, host);
 };

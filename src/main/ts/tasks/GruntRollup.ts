@@ -55,7 +55,7 @@ const patchOptions = (options) => {
   return newOptions;
 };
 
-export const task = (grunt) => {
+export const task = (grunt: IGrunt): void => {
   grunt.registerMultiTask('rollup', 'rollup your grunt!', function () {
     const done = this.async();
     const options = patchOptions(this.options(defaultOptions));
@@ -110,7 +110,7 @@ export const task = (grunt) => {
             grunt.file.write(file.dest, output.code);
           }
         } else {
-          grunt.file.write(file.dest, output.source);
+          grunt.file.write(file.dest, String(output.source));
         }
       }
 

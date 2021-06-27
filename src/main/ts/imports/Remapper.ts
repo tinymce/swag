@@ -1,14 +1,14 @@
-import { FileSystem } from '../fs/FileSystem';
-import { getFileSystem } from '../fs/CachedFileSystem';
 import { parse } from '../ast/js/Parser';
-import { serialize } from '../ast/js/Serializer';
 import { remap } from '../ast/js/Remap';
-import { parseImports, importsToText, RawToken } from './RawSourceParser';
+import { serialize } from '../ast/js/Serializer';
 import { createRemapCache } from '../ast/RemapCache';
+import { getFileSystem } from '../fs/CachedFileSystem';
+import { FileSystem } from '../fs/FileSystem';
+import { parseImports, importsToText, RawToken } from './RawSourceParser';
 
 export interface ImportRemapperResult {
-  inputImports: RawToken[];
-  outputImportsCode: string;
+  readonly inputImports: RawToken[];
+  readonly outputImportsCode: string;
 }
 
 export type Remapper = (code: string, id: string) => string;

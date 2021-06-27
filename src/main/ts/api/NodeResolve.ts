@@ -1,13 +1,15 @@
-import { Prefixes, resolvePrefixPaths, resolveId, Mappers } from '../fs/Resolve';
+import { Plugin } from 'rollup';
+
 import { getFileSystem } from '../fs/CachedFileSystem';
 import { FileSystem } from '../fs/FileSystem';
+import { Prefixes, resolvePrefixPaths, resolveId, Mappers } from '../fs/Resolve';
 
 interface Options {
-  basedir: string;
-  prefixes: Prefixes;
-  mappers: Mappers;
-  forceFlat: boolean;
-  fileSystem?: FileSystem;
+  readonly basedir: string;
+  readonly prefixes: Prefixes;
+  readonly mappers: Mappers;
+  readonly forceFlat: boolean;
+  readonly fileSystem?: FileSystem;
 }
 
 const defaultOptions = {
@@ -17,8 +19,8 @@ const defaultOptions = {
   forceFlat: true
 };
 
-const nodeResolve = (options: Options = defaultOptions) => {
-  const combinedOptions = {...defaultOptions, ...options};
+const nodeResolve = (options: Options = defaultOptions): Plugin => {
+  const combinedOptions = { ...defaultOptions, ...options };
   const prefixes = resolvePrefixPaths(combinedOptions.basedir, combinedOptions.prefixes);
   const fs = options.fileSystem ? options.fileSystem : getFileSystem();
 

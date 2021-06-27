@@ -6,9 +6,9 @@ export enum ExportInfoKind {
 }
 
 interface ExportInfo {
-  name: string;
-  fromName: string;
-  kind: ExportInfoKind;
+  readonly name: string;
+  readonly fromName: string;
+  readonly kind: ExportInfoKind;
 }
 
 const isVariableDeclaration = (declaration: estree.Declaration): declaration is estree.VariableDeclaration => {

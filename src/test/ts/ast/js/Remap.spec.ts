@@ -1,11 +1,12 @@
-import { remap } from '../../../../main/ts/ast/js/Remap';
-import { parse } from '../../../../main/ts/ast/js/Parser';
-import { serialize } from '../../../../main/ts/ast/js/Serializer';
-import { getFileSystem, createFile, createJsonFile } from '../../mock/MockFileSystem';
+import { fail } from 'assert';
 import { expect } from 'chai';
 import 'mocha';
-import { fail } from 'assert';
+
+import { parse } from '../../../../main/ts/ast/js/Parser';
+import { remap } from '../../../../main/ts/ast/js/Remap';
+import { serialize } from '../../../../main/ts/ast/js/Serializer';
 import { createRemapCache } from '../../../../main/ts/ast/RemapCache';
+import { getFileSystem, createFile, createJsonFile } from '../../mock/MockFileSystem';
 
 const mockFiles = [
   createJsonFile('/project/node_modules/@ephox/katamari/package.json', {
@@ -148,7 +149,8 @@ describe('Remap', () => {
       fail('Should never get here');
     } catch (e) {
       expect(e.message).to.equal([
-        'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly impede any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
+        'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly ' +
+        'impede any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
         '  exported variable: getAll',
         '  main module: /project/node_modules/@tinymce/something/dist/js/icons.js'
       ].join('\n'));

@@ -2,9 +2,9 @@ import { ObjectCache, createObjectCache } from '../utils/ObjectCache';
 import { MainModuleInfo } from './js/MainModule';
 
 interface RemapCache {
-  mainModuleCache: ObjectCache<MainModuleInfo>;
-  moduleResolveCache: ObjectCache<string>;
-  mainModuleResolveCache: ObjectCache<string>;
+  readonly mainModuleCache: ObjectCache<MainModuleInfo>;
+  readonly moduleResolveCache: ObjectCache<string>;
+  readonly mainModuleResolveCache: ObjectCache<string>;
 }
 
 const createRemapCache = (): RemapCache => {

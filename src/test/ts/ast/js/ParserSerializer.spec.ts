@@ -1,7 +1,8 @@
-import { parse } from '../../../../main/ts/ast/js/Parser';
-import { serialize } from '../../../../main/ts/ast/js/Serializer';
 import { expect } from 'chai';
 import 'mocha';
+
+import { parse } from '../../../../main/ts/ast/js/Parser';
+import { serialize } from '../../../../main/ts/ast/js/Serializer';
 
 describe('Parser/Serializer', () => {
   it('should handle unicode correctly when parsing/serializing', () => {

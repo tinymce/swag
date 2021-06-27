@@ -1,4 +1,5 @@
 import * as estree from 'estree';
+
 import { fail } from '../../utils/Fail';
 import { serialize } from './Serializer';
 
@@ -10,10 +11,10 @@ export enum ImportInfoKind {
 }
 
 export interface ImportInfo {
-  kind: ImportInfoKind; // default, namespace, specified, sideeffect
-  name: string;         // Output module name
-  fromName: string;     // Input name in a specified import
-  modulePath: string;   // Relative filepath
+  readonly kind: ImportInfoKind; // default, namespace, specified, sideeffect
+  readonly name: string;         // Output module name
+  readonly fromName: string;     // Input name in a specified import
+  readonly modulePath: string;   // Relative filepath
 }
 
 const createImport = (kind: ImportInfoKind, name: string, fromName: string, modulePath: string): ImportInfo => {

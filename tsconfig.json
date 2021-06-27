@@ -6,9 +6,10 @@
     "lib": ["es2015"],
     "declaration": true,
     "sourceMap": false,
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "outDir": "lib",
-    "types": ["node"]
+    "types": ["node", "grunt"]
   },
   "include": [
     "src/main/ts",

@@ -1,7 +1,8 @@
-import { createRemapper, remapImportsInSource } from '../../../main/ts/imports/Remapper';
-import { getFileSystem, createFile, createJsonFile } from '../mock/MockFileSystem';
 import { expect } from 'chai';
 import 'mocha';
+
+import { createRemapper, remapImportsInSource } from '../../../main/ts/imports/Remapper';
+import { getFileSystem, createFile, createJsonFile } from '../mock/MockFileSystem';
 
 const mockFiles = [
   createJsonFile('/project/node_modules/@ephox/katamari/package.json', {
@@ -51,7 +52,7 @@ const mockFiles = [
 ];
 
 describe('Remapper', () => {
-  it('should remap module imports to absolute file imports in source', () => {
+  it('should remap module imports to absolute file imports', () => {
     const mockFs = getFileSystem(mockFiles);
     const remapper = createRemapper(mockFs);
 
@@ -80,11 +81,11 @@ describe('Remapper', () => {
     const remapResult = remapImportsInSource(remapper, inputSource, '/project/src/main/ts/Module.js');
     expect(remapResult).to.deep.equal({
       inputImports: [
-       {
-        start: 7,
-        end: 62,
-        text: 'import { Fun, Arr, Arr2, noop } from \'@ephox/katamari\';'
-       }
+        {
+          start: 7,
+          end: 62,
+          text: 'import { Fun, Arr, Arr2, noop } from \'@ephox/katamari\';'
+        }
       ],
       outputImportsCode: [
         `import * as Fun from '/project/node_modules/@ephox/katamari/Fun.js';`,
@@ -92,6 +93,6 @@ describe('Remapper', () => {
         `import Arr2 from '/project/node_modules/@ephox/katamari/Arr.js';`,
         `import { noop } from '/project/node_modules/@ephox/katamari/Fun.js';`
       ].join('\n')
-     });
+    });
   });
 });

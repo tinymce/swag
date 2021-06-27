@@ -1,5 +1,7 @@
 import * as path from 'path';
 
+type Mapper = (importee: string, importer: string) => string;
+
 const isChildOf = (childPath: string, parentPath: string) => {
   return childPath.startsWith(parentPath + '/');
 };
@@ -8,16 +10,16 @@ const replacePrefix = (importeePath: string, oldDirPath: string, newDirPath: str
   return newDirPath + importeePath.substring(oldDirPath.length);
 };
 
-const replaceDir = (oldDir: string, newDir: string) => {
+const replaceDir = (oldDir: string, newDir: string): Mapper => {
   const oldDirPath = path.resolve(oldDir);
   const newDirPath = path.resolve(newDir);
 
-  return (importee, importer) => {
+  return (importee, _importer) => {
     return isChildOf(importee, oldDirPath) ? replacePrefix(importee, oldDirPath, newDirPath) : importee;
   };
 };
 
-const invalidDir = (dir: string) => {
+const invalidDir = (dir: string): Mapper => {
   const invalidDirPath = path.resolve(dir);
 
   return (importee, importer) => {
