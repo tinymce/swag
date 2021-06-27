@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+
 import { FileSystem } from './FileSystem';
 
 const getFileSystem = (): FileSystem => {
@@ -13,7 +14,7 @@ const getFileSystem = (): FileSystem => {
       return cb(null, cacheItem);
     }
 
-    fs.stat(file, function (err, stat) {
+    fs.stat(file, (err, stat) => {
       if (!err) {
         const exists = stat.isFile() || stat.isFIFO();
         statCache[file] = exists;
@@ -34,7 +35,7 @@ const getFileSystem = (): FileSystem => {
       return callback(null, cacheItem);
     }
 
-    fs.readFile(filePath, function (err, data) {
+    fs.readFile(filePath, (err, data) => {
       if (!err) {
         contentCache[filePath] = data;
       }
@@ -51,13 +52,15 @@ const getFileSystem = (): FileSystem => {
     }
 
     try {
-        const stat = fs.statSync(filePath);
-        const exists = stat.isFile() || stat.isFIFO();
-        statCache[filePath] = exists;
-        return exists;
+      const stat = fs.statSync(filePath);
+      const exists = stat.isFile() || stat.isFIFO();
+      statCache[filePath] = exists;
+      return exists;
     } catch (e) {
-        if (e && (e.code === 'ENOENT' || e.code === 'ENOTDIR')) { return false; }
-        throw e;
+      if (e && (e.code === 'ENOENT' || e.code === 'ENOTDIR')) {
+        return false;
+      }
+      throw e;
     }
   };
 
@@ -96,7 +99,7 @@ const getFileSystem = (): FileSystem => {
       return cb(null, cacheItem);
     }
 
-    fs.stat(dirPath, function (err, stat) {
+    fs.stat(dirPath, (err, stat) => {
       if (!err) {
         const exists = stat.isDirectory();
         statCache[dirPath] = exists;
@@ -123,7 +126,9 @@ const getFileSystem = (): FileSystem => {
       statCache[dirPath] = exists;
       return exists;
     } catch (e) {
-      if (e && (e.code === 'ENOENT' || e.code === 'ENOTDIR')) { return false; }
+      if (e && (e.code === 'ENOENT' || e.code === 'ENOTDIR')) {
+        return false;
+      }
       throw e;
     }
   };

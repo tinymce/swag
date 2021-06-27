@@ -1,8 +1,9 @@
-import { getFileSystem, createFile, createJsonFile } from '../mock/MockFileSystem';
+import { fail } from 'assert';
 import { expect } from 'chai';
 import 'mocha';
+
 import { resolveId } from '../../../main/ts/fs/Resolve';
-import { fail } from 'assert';
+import { getFileSystem, createFile, createJsonFile } from '../mock/MockFileSystem';
 
 const packageJson = {
   name: '@ephox/katamari',
@@ -74,7 +75,7 @@ describe('Resolve', () => {
 
   it('should resolve using mapper', async () => {
     const resolver = resolveId(mockFs, {}, [
-      (importee, importer) => '/prefix' + importee
+      (importee, _importer) => '/prefix' + importee
     ], false);
 
     const resolvedPath = await resolver('@ephox/katamari', '/project/src/Main.js');
@@ -85,7 +86,7 @@ describe('Resolve', () => {
     const resolver = resolveId(mockFs, {}, [], false);
 
     const resolvedPath = await resolver('/project/src/Main.js', '\0/project/src/Main.js?commonjs-proxy');
-    // tslint:disable-next-line:no-unused-expression
+    // eslint-disable-next-line no-unused-expressions
     expect(resolvedPath).to.be.null;
   });
 });

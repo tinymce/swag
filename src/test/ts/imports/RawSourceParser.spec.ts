@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
+
 import { parseComments, parseImports } from '../../../main/ts/imports/RawSourceParser';
 
 describe('RawSourceParser', () => {

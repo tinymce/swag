@@ -1,7 +1,9 @@
-import * as resolve from 'resolve';
+/* eslint-disable @typescript-eslint/unbound-method */
 import * as path from 'path';
-import { FileSystem } from '../fs/FileSystem';
+import resolve from 'resolve';
+
 import { fail } from '../utils/Fail';
+import { FileSystem } from './FileSystem';
 
 type Prefixes = any;
 type Mappers = Array<(importee: string, importer: string) => string>;
@@ -30,11 +32,11 @@ const resolveSync = (fs: FileSystem, importee: string, importer: string, forceFl
 };
 
 const forcedFlatMessage = (importer: string, importee: string, resolved: string) => [
-    'Error non flat package structure detected:',
-    ' importer: ' + importer,
-    ' importee: ' + importee,
-    ' resolved: ' + resolved
-  ].join('\n');
+  'Error non flat package structure detected:',
+  ' importer: ' + importer,
+  ' importee: ' + importee,
+  ' resolved: ' + resolved
+].join('\n');
 
 const isFlat = (id: string) => id.split('/').filter((p) => p === 'node_modules').length < 2;
 
@@ -45,7 +47,7 @@ const resolveUsingNode = (fs: FileSystem, importee: string, importer: string, fo
       importee,
       {
         basedir: path.dirname(importer),
-        packageFilter(pkg, pkgPath) {
+        packageFilter: (pkg, _pkgPath) => {
           if (pkg.module) {
             pkg.main = pkg.module;
           } else if (pkg['jsnext:main']) {
@@ -81,8 +83,8 @@ const matchesPrefix = (prefixes: Prefixes, importee: string): boolean => {
   return Object.keys(prefixes).find((p) => importee.startsWith(normalizePrefix(p))) !== undefined;
 };
 
-const resolvePrefix = (prefixes: Prefixes, importee: string, importer: string): Promise<string> => {
-  return new Promise((fulfil, reject) => {
+const resolvePrefix = (prefixes: Prefixes, importee: string, _importer: string): Promise<string> => {
+  return new Promise((fulfil) => {
     const prefix = Object.keys(prefixes).find((p) => importee.startsWith(normalizePrefix(p)));
     const resolvedPrefix = prefixes[prefix];
     const resolvedPath = path.join(resolvedPrefix, importee.substring(normalizePrefix(prefix).length)) + '.js';
@@ -106,7 +108,7 @@ const runMappers = (importer: string, mappers: Mappers) => (resolvedImportee: st
   return Promise.resolve(mappers.reduce((p, f) => f(p, importer), resolvedImportee));
 };
 
-const resolveId = (fs: FileSystem, prefixes: Prefixes, mappers: Mappers, forceFlat: boolean) => (importee: string, importer: string) => {
+const resolveId = (fs: FileSystem, prefixes: Prefixes, mappers: Mappers, forceFlat: boolean) => (importee: string, importer: string): Promise<string> => {
   // ignore IDs with null character, these belong to other plugins
   if (/\0/.test(importee) || !importer || /\0/.test(importer)) {
     return null;

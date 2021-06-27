@@ -10,7 +10,9 @@ const parse = (code: string): estree.Program => {
   });
 
   // This is causing "Type 'Node' is missing the following properties from type 'Program': sourceType, body"
-  // however the type returned by acorn.parse is `Program` so it shouldn't be doing that. As such this seems like an issue with the types, so just ignore it for now
+  // however the type returned by acorn.parse is `Program` so it shouldn't be doing that. As such this seems
+  // like an issue with the types, so just ignore it for now.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return program;
 };

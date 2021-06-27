@@ -1,30 +1,23 @@
-import { parse } from '../ast/js/Parser';
-import { serialize } from '../ast/js/Serializer';
-import { remap } from '../ast/js/Remap';
-import { FileSystem } from '../fs/FileSystem';
-import { getFileSystem } from '../fs/CachedFileSystem';
-import { createRemapCache, RemapCache } from '../ast/RemapCache';
 import { extname } from 'path';
+import { Plugin, SourceDescription, TransformResult } from 'rollup';
+
+import { parse } from '../ast/js/Parser';
+import { remap } from '../ast/js/Remap';
+import { serialize } from '../ast/js/Serializer';
+import { createRemapCache, RemapCache } from '../ast/RemapCache';
+import { getFileSystem } from '../fs/CachedFileSystem';
+import { FileSystem } from '../fs/FileSystem';
 
 interface Options {
-  fileSystem?: FileSystem;
-  forceFlat: boolean;
-}
-
-interface RollupResult {
-  code: string;
-  map: {
-    version: number;
-    sources: string[];
-    mappings: string;
-  };
+  readonly fileSystem?: FileSystem;
+  readonly forceFlat: boolean;
 }
 
 const defaultOptions = {
   forceFlat: true
 };
 
-const transformJs = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean, code: string, id: string) => {
+const transformJs = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean, code: string, id: string): SourceDescription => {
   const program = parse(code);
 
   remap(fs, remapCache, id, program, forceFlat);
@@ -37,12 +30,12 @@ const transformJs = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean,
   };
 };
 
-const transform = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean) => (code: string, id: string): RollupResult | string => {
+const transform = (fs: FileSystem, remapCache: RemapCache, forceFlat: boolean) => (code: string, id: string): TransformResult => {
   return extname(id) === '.js' ? transformJs(fs, remapCache, forceFlat, code, id) : code;
 };
 
-const remapImports = (options: Options = defaultOptions) => {
-  const combinedOptions = {...defaultOptions, ...options};
+const remapImports = (options: Options = defaultOptions): Plugin => {
+  const combinedOptions = { ...defaultOptions, ...options };
   const fs = combinedOptions.fileSystem ? combinedOptions.fileSystem : getFileSystem();
   const remapCache = createRemapCache();
 

@@ -1,8 +1,8 @@
 import { FileSystem } from '../../../main/ts/fs/FileSystem';
 
 export interface File {
-  filePath: string;
-  data: Buffer;
+  readonly filePath: string;
+  readonly data: Buffer;
 }
 
 const findFileByPath = (files: File[], filePath: string) => files.find((file) => file.filePath === filePath);

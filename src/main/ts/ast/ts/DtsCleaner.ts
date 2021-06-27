@@ -1,10 +1,11 @@
 import * as ts from 'typescript';
+
 import { serialize } from './Serializer';
 
 export interface CleanerOptions {
-  keepComments?: boolean;
-  keepVariables?: string[];
-  removeNamespaces?: string[];
+  readonly keepComments?: boolean;
+  readonly keepVariables?: string[];
+  readonly removeNamespaces?: string[];
 }
 
 const isNamed = (node: { name: ts.PropertyName | ts.BindingName }, names: string[]) =>
@@ -17,7 +18,7 @@ const isExported = (node: { modifiers?: ts.ModifiersArray }): boolean =>
   node.modifiers && node.modifiers.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword);
 
 // Strip out all comments, namespace, function and const declarations
-export const clean = (ast: ts.SourceFile, options: CleanerOptions = {}) => {
+export const clean = (ast: ts.SourceFile, options: CleanerOptions = {}): string => {
   const keepVariables = options.keepVariables || [];
   const removeNamespaces = options.removeNamespaces || [];
 

@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
+
 import { ExportInfoKind } from '../../../../main/ts/ast/js/Exports';
 import { ImportInfoKind } from '../../../../main/ts/ast/js/Imports';
 import { readMainModule } from '../../../../main/ts/ast/js/MainModule';

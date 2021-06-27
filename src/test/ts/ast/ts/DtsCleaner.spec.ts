@@ -1,4 +1,6 @@
 import { expect } from 'chai';
+import 'mocha';
+
 import { clean } from '../../../../main/ts/ast/ts/DtsCleaner';
 import { parse } from '../../../../main/ts/ast/ts/Parser';
 

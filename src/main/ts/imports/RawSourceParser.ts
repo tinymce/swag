@@ -1,14 +1,13 @@
 export interface RawToken {
-  start: number;
-  end: number;
-  text: string;
+  readonly start: number;
+  readonly end: number;
+  readonly text: string;
 }
 
 const tokenize = (regex: RegExp, code: string) => {
   const tokens: RawToken[] = [];
   let matches: RegExpExecArray;
 
-  // tslint:disable-next-line:no-conditional-assignment
   while ((matches = regex.exec(code))) {
     tokens.push({ start: matches.index, end: matches.index + matches[0].length, text: matches[0] });
   }

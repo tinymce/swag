@@ -1,19 +1,25 @@
 import * as estree from 'estree';
+
 import { FileSystem } from '../../fs/FileSystem';
 import { resolveSync } from '../../fs/Resolve';
 import { fail } from '../../utils/Fail';
+import { RemapCache } from '../RemapCache';
 import { ExportInfoKind } from './Exports';
 import { createImport, ImportInfo, ImportInfoKind, readImports, toAst } from './Imports';
 import { readMainModule } from './MainModule';
 import { parse } from './Parser';
-import { RemapCache } from '../RemapCache';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
 const isWrapModuleImport = (path: string) => /^@(ephox|tinymce)\/wrap\-[^\/]*/.test(path);
 const isOxideModuleImport = (path: string) => /^@(ephox|tinymce)\/oxide[^\/]*/.test(path);
 const isGlobalsModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\-]+\-globals$/.test(path);
 const isEphoxModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\/]*$/.test(path);
-const isRemapTargetImport = (path: string) => isEphoxModuleImport(path) && !isGlobalsModuleImport(path) && !isWrapModuleImport(path) && !isOxideModuleImport(path);
+
+const isRemapTargetImport = (path: string) =>
+  isEphoxModuleImport(path) &&
+  !isGlobalsModuleImport(path) &&
+  !isWrapModuleImport(path) &&
+  !isOxideModuleImport(path);
 
 const findRootName = (modulePath: string) => {
   const parts = modulePath.split('/');
@@ -40,7 +46,8 @@ const remapImport = (fs: FileSystem, remapCache: RemapCache, id: string, imp: Im
   // If the export is a variable declaration then we can't remap it so fail
   if (exportForImport.kind === ExportInfoKind.Variable) {
     fail([
-      'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly impede any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
+      'Exported local variables defined as `export const = ...` are not allowed in the main module. They cannot be remapped and will greatly impede ' +
+      'any tree-shaking opportunities. Instead, you should move them to a separate module and use the `export { ... }` syntax.',
       '  exported variable: ' + exportForImport.name,
       '  main module: ' + mainModulePath
     ].join('\n'));

@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "extends": "plugin:@tinymce/editor",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "rules": {
+    "@tinymce/no-unimported-promise": "off",
+    "@tinymce/prefer-fun": "off"
+  }
+}
