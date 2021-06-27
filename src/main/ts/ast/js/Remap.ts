@@ -10,10 +10,10 @@ import { readMainModule } from './MainModule';
 import { parse } from './Parser';
 
 const isImport = (node: estree.Node) => node.type === 'ImportDeclaration';
-const isWrapModuleImport = (path: string) => /^@(ephox|tinymce)\/wrap\-[^\/]*/.test(path);
-const isOxideModuleImport = (path: string) => /^@(ephox|tinymce)\/oxide[^\/]*/.test(path);
-const isGlobalsModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\-]+\-globals$/.test(path);
-const isEphoxModuleImport = (path: string) => /^@(ephox|tinymce)\/[^\/]*$/.test(path);
+const isWrapModuleImport = (path: string) => /^@(ephox|tinymce|tiny-premium)\/wrap\-[^\/]*/.test(path);
+const isOxideModuleImport = (path: string) => /^@(ephox|tinymce|tiny-premium)\/oxide[^\/]*/.test(path);
+const isGlobalsModuleImport = (path: string) => /^@(ephox|tinymce|tiny-premium)\/[^\-]+\-globals$/.test(path);
+const isEphoxModuleImport = (path: string) => /^@(ephox|tinymce|tiny-premium)\/[^\/]*$/.test(path);
 
 const isRemapTargetImport = (path: string) =>
   isEphoxModuleImport(path) &&
