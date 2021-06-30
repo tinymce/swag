@@ -110,7 +110,7 @@ export const task = (grunt: IGrunt): void => {
             grunt.file.write(file.dest, output.code);
           }
         } else {
-          grunt.file.write(file.dest, String(output.source));
+          grunt.file.write(file.dest, output.source.toString());
         }
       }
 
