@@ -1,6 +1,6 @@
 {
   "name": "@ephox/swag",
-  "version": "4.4.0-rc",
+  "version": "4.4.0",
   "description": "A collection of tools for rollup/webpack",
   "private": false,
   "repository": {
