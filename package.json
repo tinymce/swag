@@ -35,7 +35,7 @@
     "webpack-sources": "^2.3.0"
   },
   "devDependencies": {
-    "@tinymce/beehive-flow": "^0.15.0",
+    "@tinymce/beehive-flow": "^0.17.0",
     "@tinymce/eslint-plugin": "^1.9.1",
     "@types/acorn": "^4.0.3",
     "@types/chai": "^4.2.3",
