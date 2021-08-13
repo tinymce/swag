@@ -78,10 +78,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@tinymce/beehive-flow@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@tinymce/beehive-flow/-/beehive-flow-0.15.0.tgz#f5736c1a41313d0b000b51bbfd51404d88f79482"
-  integrity sha512-MBv/0M+Yib9BKH8KZhWeTq+LX57CrL410Wv/k9ugkjKS10ZSoQszlt3o/xbVEFgV8wRlNaIY8hlukStBUgoHXQ==
+"@tinymce/beehive-flow@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@tinymce/beehive-flow/-/beehive-flow-0.17.0.tgz#a86972a60eafe30d7b3874e690d812d1ced93cf9"
+  integrity sha512-bXt2qghT56bCkYywXuYl+bKhLznTo3bgJvFVsSHtFK/fgivwhByry4tGQPs65+0QydImRIcwfGKVqXvYJ7aHZA==
   dependencies:
     cross-spawn-promise "^0.10.2"
     fp-ts "^2.9.5"
