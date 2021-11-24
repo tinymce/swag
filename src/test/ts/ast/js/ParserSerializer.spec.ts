@@ -14,4 +14,16 @@ describe('Parser/Serializer', () => {
       'var x = { x: \'a\\uFEFF\\uFEFF\' };'
     ].join('\n'));
   });
+
+  it('should handle optional chaining when parsing/serializing', () => {
+    const ast = parse([
+      'const x = {};',
+      'let a = x?.b;'
+    ].join('\n'));
+
+    expect(serialize(ast)).to.equal([
+      'const x = {};',
+      'let a = x?.b;'
+    ].join('\n'));
+  });
 });

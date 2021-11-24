@@ -3,7 +3,7 @@ import * as estree from 'estree';
 
 const parse = (code: string): estree.Program => {
   const program = acorn.parse(code, {
-    ecmaVersion: 8,
+    ecmaVersion: 2021,
     sourceType: 'module',
     preserveParens: false,
     ranges: false
