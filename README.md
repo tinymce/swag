@@ -1,6 +1,6 @@
 # Swag
 
-This project contains various rollup and webpacl plugins that are useful when dealing with es6 modules, as well as a grunt rollup task.
+This project contains various rollup and webpack plugins that are useful when dealing with es6 modules, as well as a grunt rollup task.
 
 ### swag.nodeResolve
 
@@ -12,7 +12,7 @@ file for each package multiple times. This only does disk I/O once it also has s
 Remaps module imports to the absolute module path by checking the import/exports on the main entry point module of a package.
 
 So for example an local import of this: `import { Arr } from '@ephox/katamari'` would get remapped to `import Arr from '/some/absolute/file/path'`
-this will reduce the amout of files included and also reduce output size since local variables created by function calls in the top level of a module
+this will reduce the amount of files included and also reduce output size since local variables created by function calls in the top level of a module
 would otherwise be included even though it wasn't used since JS isn't pure those calls could cause side effects and can't be removed.
 
 ### Example of usage
