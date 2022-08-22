@@ -6,7 +6,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "@tinymce/no-unimported-promise": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
     "@tinymce/prefer-fun": "off"
   }
 }
