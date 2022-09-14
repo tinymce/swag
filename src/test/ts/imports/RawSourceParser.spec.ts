@@ -201,7 +201,7 @@ describe('RawSourceParser', () => {
     ]);
   });
 
-  it ('should not parse functions called import', () => {
+  it('should not parse functions called import', () => {
     const importFormat = [
       'import defaultMember from \'module-name\';',
       'var wordimport = function (cleaner, createDialog, config) {'

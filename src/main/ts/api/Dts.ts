@@ -1,4 +1,4 @@
-import { Plugin } from 'rollup';
+import { ObjectHook, Plugin } from 'rollup';
 import rollupDts, { Options } from 'rollup-plugin-dts';
 import * as ts from 'typescript';
 
@@ -37,6 +37,9 @@ const cleanCode = (filename: string, code: string, options: CleanerOptions) => {
   return clean(source, options);
 };
 
+const getPluginHook = <T extends Function>(hook: T | ObjectHook<T>): T =>
+  typeof hook === 'function' ? hook : hook.handler;
+
 const dts = (options: DtsOptions = {}): Plugin => {
   const dtsPlugin = rollupDts(options);
 
@@ -45,13 +48,13 @@ const dts = (options: DtsOptions = {}): Plugin => {
     ...dtsPlugin,
     outputOptions: (outputOptions) => {
       // Need to override the entry filename, as the plugin converts it to "name.d.d.ts"
-      return dtsPlugin.outputOptions.call(dtsPlugin, {
+      return getPluginHook(dtsPlugin.outputOptions).call(dtsPlugin, {
         ...outputOptions,
         entryFileNames: outputOptions.entryFileNames || '[name].ts'
       });
     },
     renderChunk: (code, chunk) => {
-      const output = dtsPlugin.renderChunk.call(dtsPlugin, code, chunk);
+      const output = getPluginHook(dtsPlugin.renderChunk).call(dtsPlugin, code, chunk);
       // Strip out source mapping comments
       const transformedCode = output.code.replace(/\/\/# sourceMappingURL=\w+\.d\.ts\.map/g, '');
       if (process.env.SWAG_DTS_DEBUG) {

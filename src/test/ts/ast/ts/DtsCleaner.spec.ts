@@ -87,4 +87,22 @@ interface A {
 export { A };
 `);
   });
+
+  it('should keep generics', () => {
+    const program = parse(`
+    type A = Record<string, any>;
+    type B<T extends A> = A;
+    type C<T extends A> = B<T>;
+    export { C };
+  `, 'test.d.ts');
+    const source = program.getSourceFile('test.d.ts');
+
+    const cleanedCode = clean(source, {});
+
+    expect(cleanedCode).to.equal( `type A = Record<string, any>;
+type B<T extends A> = A;
+type C<T extends A> = B<T>;
+export { C };
+`);
+  });
 });
