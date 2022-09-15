@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Upgraded the minimum rollup and rollup-plugin-dts versions.
 
 ### Fixed
-- Type generics could be incorrectly when .d.ts files are generated.
+- Type generics could be incorrect when .d.ts files are generated.
 
 ## 4.5.0 - 2021-11-24
 
