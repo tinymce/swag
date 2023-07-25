@@ -31,7 +31,7 @@ const defaultOutputOptions: Partial<OutputOptions> = {
   preferConst: false,
   sourcemap: false,
   sourcemapFile: null,
-  interop: true
+  interop: 'auto'
 };
 
 const defaultOptions = {
